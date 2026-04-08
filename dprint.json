@@ -20,6 +20,7 @@
 		"**/*.{ts,json,md}"
 	],
 	"excludes": [
+		".github/.release-manifest.json",
 		"**/node_modules",
 		"**/*-lock.json",
 		"**/tsconfig.json",
