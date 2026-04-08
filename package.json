@@ -22,7 +22,7 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.15.1",
 		"class-validator-jsonschema": "^5.1.0",
-		"handlebars": "latest",
+		"handlebars": "^4.7.9",
 		"zod": "latest",
 		"zod-to-json-schema": "latest",
 		"valibot": "latest",
@@ -94,6 +94,7 @@
 	],
 	"dependencies": {
 		"d3": "^7.9.0",
+		"latest": "^0.2.0",
 		"reflect-metadata": "^0.2.2"
 	}
 }
