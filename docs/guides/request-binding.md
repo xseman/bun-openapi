@@ -59,4 +59,4 @@ whoAmI(@Request() request: Request) {
 
 ## Example
 
-See [examples/basic/controller.ts](../../examples/basic/controller.ts).
+See [examples/basic/controller.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/controller.ts).

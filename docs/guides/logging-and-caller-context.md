@@ -27,4 +27,4 @@ This lets loggers emit labels like ItemController.create without manual string c
 
 ## Example
 
-See [examples/logging/server.ts](../../examples/logging/server.ts), [examples/logging/logger.ts](../../examples/logging/logger.ts), and [examples/logging/request-context.ts](../../examples/logging/request-context.ts).
+See [examples/logging/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/server.ts), [examples/logging/logger.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/logger.ts), and [examples/logging/request-context.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/request-context.ts).

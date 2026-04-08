@@ -24,4 +24,4 @@ No. Endpoints using @Render are excluded from the generated OpenAPI spec.
 
 ## Where do I find complete API type definitions?
 
-See [src/types.ts](../src/types.ts) and [src/index.ts](../src/index.ts).
+See [src/types.ts](https://github.com/xseman/bun-openapi/blob/master/src/types.ts) and [src/index.ts](https://github.com/xseman/bun-openapi/blob/master/src/index.ts).

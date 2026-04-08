@@ -60,5 +60,5 @@ Validation can apply to:
 
 ## Example Projects
 
-- [examples/basic/server.ts](../../examples/basic/server.ts)
-- [examples/class-validator/server.ts](../../examples/class-validator/server.ts)
+- [examples/basic/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/server.ts)
+- [examples/class-validator/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/class-validator/server.ts)

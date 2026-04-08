@@ -73,4 +73,4 @@ It can return:
 
 ## Example
 
-See [examples/basic/server.ts](../../examples/basic/server.ts).
+See [examples/basic/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/server.ts).

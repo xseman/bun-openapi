@@ -37,4 +37,4 @@ Validation mismatch is treated as a server error and flows through errorFormatte
 
 ## Example
 
-See [examples/interceptors/server.ts](../../examples/interceptors/server.ts).
+See [examples/interceptors/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/interceptors/server.ts).

@@ -54,4 +54,4 @@ createApp returns:
 - fetch: fallback handler
 - spec: generated OpenAPI document
 
-See [src/types.ts](../../src/types.ts) for complete type definitions.
+See [src/types.ts](https://github.com/xseman/bun-openapi/blob/master/src/types.ts) for complete type definitions.

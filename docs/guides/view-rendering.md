@@ -38,4 +38,4 @@ home() {
 
 ## Example
 
-See [examples/mvc/server.ts](../../examples/mvc/server.ts).
+See [examples/mvc/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/mvc/server.ts).

@@ -52,5 +52,5 @@ Call this.setStatus(code) before returning to set a non-default status.
 
 ## See Also
 
-- [examples/basic/controller.ts](../../examples/basic/controller.ts)
-- [examples/multi-controller/controllers.ts](../../examples/multi-controller/controllers.ts)
+- [examples/basic/controller.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/controller.ts)
+- [examples/multi-controller/controllers.ts](https://github.com/xseman/bun-openapi/blob/master/examples/multi-controller/controllers.ts)

@@ -59,4 +59,4 @@ This page lists decorators exported from bun-openapi.
 | @Inject(token)        | Injects token into constructor or property            |
 | @Module(metadata)     | Declares module controllers/providers/imports/exports |
 
-Source of truth for exports: [src/index.ts](../../src/index.ts).
+Source of truth for exports: [src/index.ts](https://github.com/xseman/bun-openapi/blob/master/src/index.ts).
