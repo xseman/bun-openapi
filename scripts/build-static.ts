@@ -151,7 +151,7 @@ function renderSidebar(sections: SidebarSection[], outputRelative: string): stri
             <div class="brand">
                 <a href="${escapeHtml(homeHref)}">bun-openapi</a>
             </div>
-            <div id="search"></div>
+            <pagefind-modal-trigger></pagefind-modal-trigger>
 ${sectionHtml}
         </aside>`;
 }
@@ -202,10 +202,11 @@ function renderBaseStyles(): string[] {
 function renderSidebarStyles(): string[] {
 	return [
 		"    .sidebar { position: sticky; top: 0; height: 100vh; overflow: auto; padding: 28px 18px 28px 28px; border-right: 1px solid #dfdfdf; background: #f7f7f7; }",
-		"    #search { --pagefind-ui-scale: 0.8; --pagefind-ui-primary: #000; --pagefind-ui-text: #000; --pagefind-ui-background: #fff; --pagefind-ui-border: #000; --pagefind-ui-tag: #000; --pagefind-ui-font: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; --pagefind-ui-border-radius: 4px; margin-bottom: 18px; }",
-		"    #search .pagefind-ui__search-input { background: #fff; color: #000; border-color: #000; }",
-		"    #search .pagefind-ui__search-input::placeholder { color: #000; opacity: 1; }",
-		"    #search .pagefind-ui__search-clear { color: #000; }",
+		"    pagefind-modal-trigger { display: block; margin-bottom: 14px; }",
+		"    pagefind-modal-trigger .pf-trigger-btn { all: unset; display: flex; align-items: center; gap: 6px; box-sizing: border-box; cursor: pointer; font-size: 15px; line-height: 1.33; color: #888; padding: 0 0 1px; }",
+		"    pagefind-modal-trigger .pf-trigger-btn:hover { color: #1a1a1a; text-decoration: underline; }",
+		"    pagefind-modal-trigger .pf-trigger-shortcut { display: flex; gap: 2px; }",
+		"    pagefind-modal-trigger .pf-trigger-key { font-size: 11px; color: #aaa; border: 1px solid #d8d8d8; border-radius: 3px; padding: 0 3px; line-height: 1.6; background: #f3f3f3; }",
 		"    .brand { margin: 0 0 18px; font-size: 28px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; }",
 		"    .brand a { color: #111; text-decoration: none; }",
 		"    .sidebar section { margin: 0 0 18px; }",
@@ -328,18 +329,9 @@ function renderCopyCodeScript(): string {
 	].join("\n");
 }
 
-function renderPagefindInitScript(): string {
-	return [
-		"    <script>",
-		"        window.addEventListener('DOMContentLoaded', () => {",
-		"            new PagefindUI({ element: '#search', showSubResults: true });",
-		"        });",
-		"    </script>",
-	].join("\n");
-}
-
 function renderHead(title: string, outputRelative: string): string {
-	const pagefindCssHref = escapeHtml(pageLink(outputRelative, "pagefind/pagefind-ui.css"));
+	const pagefindCssHref = escapeHtml(pageLink(outputRelative, "pagefind/pagefind-component-ui.css"));
+	const pagefindJsSrc = escapeHtml(pageLink(outputRelative, "pagefind/pagefind-component-ui.js"));
 
 	return `<head>
     <meta charset="utf-8">
@@ -348,24 +340,19 @@ function renderHead(title: string, outputRelative: string): string {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="${googleFontsHref}" rel="stylesheet">
+    <link rel="stylesheet" href="${syntaxHighlightThemeHref}">
+    <link rel="stylesheet" href="${pagefindCssHref}">
     <style>
 ${renderStyles()}
     </style>
-    <link rel="stylesheet" href="${syntaxHighlightThemeHref}">
-    <link rel="stylesheet" href="${pagefindCssHref}">
 ${renderSyntaxHighlightConfigScript()}
     <script type="module" src="${syntaxHighlightScriptSrc}"></script>
+    <script type="module" src="${pagefindJsSrc}"></script>
 </head>`;
 }
 
-function renderFooterScripts(outputRelative: string): string {
-	const pagefindJsSrc = escapeHtml(pageLink(outputRelative, "pagefind/pagefind-ui.js"));
-
-	return [
-		`    <script src="${pagefindJsSrc}"></script>`,
-		renderPagefindInitScript(),
-		renderCopyCodeScript(),
-	].join("\n");
+function renderFooterScripts(): string {
+	return renderCopyCodeScript();
 }
 
 function wrapHtml(title: string, sidebar: string, body: string, outputRelative: string): string {
@@ -379,7 +366,8 @@ ${sidebar}
 ${body}
         </main>
     </div>
-${renderFooterScripts(outputRelative)}
+    <pagefind-modal></pagefind-modal>
+${renderFooterScripts()}
 </body>
 </html>`;
 }
