@@ -4,8 +4,8 @@
 
 Runnable examples are under the repository examples directory.
 
-| Example                                                      | Focus                                              |
-| ------------------------------------------------------------ | -------------------------------------------------- |
+| Example                                                                                                  | Focus                                              |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [basic](https://github.com/xseman/bun-openapi/tree/master/examples/basic/)                               | CRUD, exceptions, Swagger UI, error formatter      |
 | [class-validator](https://github.com/xseman/bun-openapi/tree/master/examples/class-validator/)           | DTO validation with class-validator                |
 | [complex](https://github.com/xseman/bun-openapi/tree/master/examples/complex/)                           | Multi-module composition                           |

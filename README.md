@@ -69,7 +69,11 @@ bun add valibot @valibot/to-json-schema
 ### Define schemas
 
 ```ts
-import { IsEmail, IsString, MinLength } from "class-validator";
+import {
+	IsEmail,
+	IsString,
+	MinLength,
+} from "class-validator";
 
 export class User {
 	@IsString()
@@ -602,7 +606,6 @@ Generate an OpenAPI spec without starting a server — useful for CI pipelines,
 documentation builds, or client SDK generation:
 
 ```ts
-import { IsString } from "class-validator";
 import {
 	buildSpec,
 	Controller,
@@ -611,6 +614,7 @@ import {
 	Route,
 } from "bun-openapi";
 import { classValidator } from "bun-openapi/adapters/class-validator";
+import { IsString } from "class-validator";
 
 class Pet {
 	@IsString()
