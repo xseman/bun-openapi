@@ -1,0 +1,45 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      h1 {
+        color: #4f46e5;
+      }
+      nav a {
+        margin-right: 16px;
+        color: #0f766e;
+        text-decoration: none;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </nav>
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+    <ul>
+      {{#each features}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+{
+	"name": "bun-openapi",
+	"description": "Help you generate OpenAPI definitions via Typescript (Bun-native port)",
+	"type": "module",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"author": "Filip Seman <filip.seman@pm.me>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xseman/bun-openapi.git"
+	},
+	"scripts": {
+		"docs:build": "bun scripts/build-static.ts",
+		"fmt": "dprint fmt",
+		"fmt:check": "dprint check",
+		"typecheck": "tsc --noEmit",
+		"test": "bun test src/ --coverage --coverage-reporter=text --coverage-reporter=lcov --concurrent",
+		"test:watch": "bun test src/ --watch --coverage --concurrent"
+	},
+	"peerDependencies": {
+		"@sinclair/typebox": "^0.34.0",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.15.1",
+		"class-validator-jsonschema": "^5.1.0",
+		"handlebars": "latest",
+		"zod": "latest",
+		"zod-to-json-schema": "latest",
+		"valibot": "latest",
+		"@valibot/to-json-schema": "latest",
+		"swagger-ui-dist": "^5.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@sinclair/typebox": {
+			"optional": true
+		},
+		"class-transformer": {
+			"optional": true
+		},
+		"class-validator": {
+			"optional": true
+		},
+		"class-validator-jsonschema": {
+			"optional": true
+		},
+		"zod": {
+			"optional": true
+		},
+		"zod-to-json-schema": {
+			"optional": true
+		},
+		"valibot": {
+			"optional": true
+		},
+		"@valibot/to-json-schema": {
+			"optional": true
+		},
+		"swagger-ui-dist": {
+			"optional": true
+		},
+		"handlebars": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@sinclair/typebox": "^0.34.49",
+		"@types/bun": "^1.3.11",
+		"@types/d3": "^7.4.3",
+		"@types/reflect-metadata": "^0.1.0",
+		"@types/swagger-ui-dist": "^3.30.6",
+		"ajv": "^8.18.0",
+		"ajv-formats": "^3.0.1",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.15.1",
+		"class-validator-jsonschema": "^5.1.0",
+		"decorator-toolkit": "^0.3.0",
+		"dprint": "~0.53.2",
+		"pagefind": "^1.5.0",
+		"swagger-ui-dist": "^5.32.2",
+		"typeorm": "^0.3.28",
+		"typescript": "~6.0.2"
+	},
+	"exports": {
+		"./package.json": "./package.json",
+		".": "./src/index.ts",
+		"./adapters/typebox": "./src/adapters/typebox.ts",
+		"./adapters/zod": "./src/adapters/zod.ts",
+		"./adapters/valibot": "./src/adapters/valibot.ts",
+		"./adapters/class-validator": "./src/adapters/class-validator.ts",
+		"./adapters/handlebars": "./src/adapters/handlebars.ts"
+	},
+	"files": [
+		"src/**/*.ts",
+		"!src/**/*.test.ts"
+	],
+	"dependencies": {
+		"d3": "^7.9.0",
+		"reflect-metadata": "^0.2.2"
+	}
+}

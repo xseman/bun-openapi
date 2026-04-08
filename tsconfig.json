@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		/* Language and Environment */
+		"target": "ES2022",
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+
+		/* Modules */
+		"module": "Node16",
+		"moduleResolution": "Node16",
+		"resolveJsonModule": true,
+
+		/* Interop Constraints */
+		"esModuleInterop": true,
+
+		/* Type Checking */
+		"strict": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"useUnknownInCatchVariables": false,
+		"noImplicitReturns": true,
+
+		/* Completeness */
+		"skipLibCheck": true
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"src/swagger-ui/**/*"
+	]
+}

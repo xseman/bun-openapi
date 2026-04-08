@@ -1,0 +1,51 @@
+name: PublishStatic Pages
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - docs/**
+            - scripts/build-static.ts
+            - .github/workflows/static.yaml
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v2
+
+            - name: Build static site
+              run: bun run docs:build
+
+            - name: Upload pages artifact
+              uses: actions/upload-pages-artifact@v4
+              with:
+                  name: github-pages
+                  path: static
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+
+        permissions:
+            pages: write
+            id-token: write
+
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+            - name: Deploy pages
+              uses: actions/deploy-pages@v5
+              id: deployment
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
