@@ -559,7 +559,11 @@ function renderMobileNavScript(): string {
 }
 
 function wrapHtml(title: string, sidebar: string, body: string, outputRelative: string, toc: string): string {
-	const pagefindBundlePath = escapeHtml(path.posix.dirname(pageLink(outputRelative, "pagefind/pagefind-component-ui.css")) + "/");
+	// bundle-path is resolved by pagefind-component-ui.js relative to its own URL (pagefind/pagefind-component-ui.js),
+	// so "./" always points to the co-located pagefind.js regardless of which HTML page is being rendered.
+	// Using a page-relative path like "pagefind/" fails for root-level pages because the browser
+	// treats it as a bare module specifier (no leading ./ or ../).
+	const pagefindBundlePath = escapeHtml("./");
 
 	return `<!doctype html>
 <html lang="en">
