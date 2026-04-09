@@ -1,0 +1,12 @@
+{
+	"name": "bun-openapi-example-dependency-injection",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run server.ts"
+	},
+	"dependencies": {
+		"class-validator": "*",
+		"decorator-toolkit": "*"
+	}
+}

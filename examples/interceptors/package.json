@@ -1,0 +1,11 @@
+{
+	"name": "bun-openapi-example-interceptors",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run server.ts"
+	},
+	"dependencies": {
+		"class-validator": "*"
+	}
+}
