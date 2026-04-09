@@ -26,21 +26,14 @@ dispatch — providing a Bun-native experience with broad ecosystem compatibilit
 
 ## Features
 
-- TypeScript experimental decorators with `reflect-metadata` — NestJS-compatible decorator model
-- Bun-native — uses `Bun.serve()` route map, `Serve.HTTPMethod`, `Server<undefined>`
-- Schema-agnostic via adapter pattern — [class-validator](#class-validator), [TypeBox](#typebox), [Zod](#zod), [Valibot](#valibot)
-- OpenAPI 3.0.3 spec generated at startup from decorator metadata
-- Request validation (params, query, body, headers) with coercion
-- Built-in HTTP exceptions and app-level error formatting
-- Class-based guard support with optional runtime enforcement for `@Security(...)`
-- Class-based interceptors for wrapping, transforming, or short-circuiting handler execution
-- Automatic caller context via `getCallerContext()` for logging, metrics, and other request-scoped integrations
-- Optional response validation against declared `@Returns(...)` schemas
-- Strict module import validation and visibility boundaries for exports and circular imports
-- Automatic spec file output (JSON or YAML) via `filePath`
-- Built-in [Swagger UI](#swagger-ui) serving (self-contained HTML via `Bun.build`)
-- Built-in [Module Viewer](#module-viewer) serving for imported module graphs
-- Spec-only mode for CI pipelines and SDK generation
+- NestJS like TypeScript decorators with `reflect-metadata`
+- Bun-native HTTP via `Bun.serve()` route map
+- Schema-agnostic — adapters for [class-validator](#class-validator), [TypeBox](#typebox), [Zod](#zod), and [Valibot](#valibot)
+- OpenAPI 3.0.3 spec generation with request validation (params, query, body, headers)
+- Guards, interceptors, and optional response validation
+- HTTP exceptions, error formatting, and caller context via `getCallerContext()`
+- Built-in [Swagger UI](#swagger-ui) and [Module Viewer](#module-viewer) (self-contained, no CDN)
+- Spec-only mode, YAML/JSON file output, and strict module import validation
 
 ## Install
 
@@ -63,6 +56,21 @@ bun add zod zod-to-json-schema
 # Valibot
 bun add valibot @valibot/to-json-schema
 ```
+
+## Examples
+
+Runnable examples default to `class-validator` DTOs unless the adapter choice is the feature being demonstrated.
+
+- **[basic](examples/basic/)** — CRUD API with schemas, HTTP exceptions, a global error formatter, and Swagger UI
+- **[class-validator](examples/class-validator/)** — DTO-based validation and OpenAPI generation with `class-validator`
+- **[complex](examples/complex/)** — Multi-module app with DI, middleware, Swagger UI, and the module viewer
+- **[dependency-injection](examples/dependency-injection/)** — Constructor and token-based injection with providers plus `decorator-toolkit/*/legacy` service decorators
+- **[guards](examples/guards/)** — `@UseGuards(...)`, runtime `@Security(...)` enforcement, custom guard responses, and formatted errors
+- **[interceptors](examples/interceptors/)** — `@UseInterceptors(...)` for response envelopes, cached `Response` short-circuiting, and response validation
+- **[logging](examples/logging/)** — `AsyncLocalStorage` request context with optional `x-user-id` and `x-session-id` headers plus automatic endpoint caller tags like `ItemController.create` across `await` boundaries
+- **[modules](examples/modules/)** — Nest-style modules with exported provider sharing and private provider boundaries
+- **[multi-controller](examples/multi-controller/)** — Multiple controllers, operation IDs, `@Deprecated`, `@Hidden`, and `@Produces`
+- **[security](examples/security/)** — Bearer auth with `@Security(...)` plus runtime `securityGuards`
 
 ## Quick start
 
@@ -723,21 +731,6 @@ flowchart LR
 	B --> H["Returns { routes, fetch, spec }"]
 	H --> I["Bun.serve({ routes, fetch })"]
 ```
-
-## Examples
-
-Runnable examples default to `class-validator` DTOs unless the adapter choice is the feature being demonstrated.
-
-- **[basic](examples/basic/)** — CRUD API with schemas, HTTP exceptions, a global error formatter, and Swagger UI
-- **[class-validator](examples/class-validator/)** — DTO-based validation and OpenAPI generation with `class-validator`
-- **[complex](examples/complex/)** — Multi-module app with DI, middleware, Swagger UI, and the module viewer
-- **[dependency-injection](examples/dependency-injection/)** — Constructor and token-based injection with providers plus `decorator-toolkit/*/legacy` service decorators
-- **[guards](examples/guards/)** — `@UseGuards(...)`, runtime `@Security(...)` enforcement, custom guard responses, and formatted errors
-- **[interceptors](examples/interceptors/)** — `@UseInterceptors(...)` for response envelopes, cached `Response` short-circuiting, and response validation
-- **[logging](examples/logging/)** — `AsyncLocalStorage` request context with optional `x-user-id` and `x-session-id` headers plus automatic endpoint caller tags like `ItemController.create` across `await` boundaries
-- **[modules](examples/modules/)** — Nest-style modules with exported provider sharing and private provider boundaries
-- **[multi-controller](examples/multi-controller/)** — Multiple controllers, operation IDs, `@Deprecated`, `@Hidden`, and `@Produces`
-- **[security](examples/security/)** — Bearer auth with `@Security(...)` plus runtime `securityGuards`
 
 ## Related
 
