@@ -123,37 +123,54 @@ function pageLink(fromOutputRelative: string, targetOutputRelative: string): str
 	return raw;
 }
 
-function renderSidebarSection(section: SidebarSection, currentFile: string): string {
+function renderNavSection(section: SidebarSection, currentFile: string): string {
 	const items = section.items
 		.map((item) => {
 			const target = toPosix(item.href);
 			const href = pageLink(currentFile, target);
-			const className = target === currentFile ? ' class="current"' : "";
+			const activeClass = target === currentFile ? ' class="active"' : "";
 
-			return `            <li><a${className} href="${escapeHtml(href)}">${escapeHtml(item.label)}</a></li>`;
+			return `                <li${activeClass}><a href="${escapeHtml(href)}">${escapeHtml(item.label)}</a></li>`;
 		})
 		.join("\n");
 
-	return `        <section>
-            <h2>${escapeHtml(section.title)}</h2>
-            <ul>
+	return `            <div class="nav-group">
+                <div class="nav-group-title">${escapeHtml(section.title)}</div>
+                <ul class="nav-list">
 ${items}
-            </ul>
-        </section>`;
+                </ul>
+            </div>`;
+}
+
+function renderNavPanels(sections: SidebarSection[], currentFile: string): string {
+	const groupsHtml = sections.map((section) => renderNavSection(section, currentFile)).join("\n");
+	return `<nav class="sidebar-nav" aria-label="Documentation">
+${groupsHtml}
+        </nav>`;
 }
 
 function renderSidebar(sections: SidebarSection[], outputRelative: string): string {
 	const currentFile = toPosix(outputRelative);
 	const homeHref = pageLink(currentFile, "index.html");
-	const sectionHtml = sections.map((section) => renderSidebarSection(section, currentFile)).join("\n");
+	const navHtml = renderNavPanels(sections, currentFile);
 
 	return `        <aside class="sidebar">
-            <div class="brand">
-                <a href="${escapeHtml(homeHref)}">bun-openapi</a>
+            <div class="sidebar-header">
+                <a href="${escapeHtml(homeHref)}" class="brand-link">bun-openapi</a>
+                <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
             </div>
-            <pagefind-modal-trigger></pagefind-modal-trigger>
-${sectionHtml}
-        </aside>`;
+            <div class="sidebar-search">
+                <pagefind-modal-trigger></pagefind-modal-trigger>
+            </div>
+            ${navHtml}
+        </aside>
+        <dialog class="mobile-nav" id="mobile-nav" aria-label="Navigation">
+            <div class="sidebar-header">
+                <a href="${escapeHtml(homeHref)}" class="brand-link">bun-openapi</a>
+                <button class="mobile-nav-close icon-btn" aria-label="Close menu">&#x2715;</button>
+            </div>
+            ${navHtml}
+        </dialog>`;
 }
 
 function pageTitleFromMarkdown(markdown: string, fallback: string): string {
@@ -190,113 +207,154 @@ function replaceCodeBlocksWithWebComponent(htmlBody: string): string {
 	});
 }
 
-function renderBaseStyles(): string[] {
-	return [
-		"    :root { color-scheme: light; scrollbar-gutter: stable; }",
-		"    * { box-sizing: border-box; }",
-		"    body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; line-height: 1.55; color: #222; background: #fff; }",
-		"    .layout { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 320px minmax(0, 1fr); }",
-	];
-}
-
-function renderSidebarStyles(): string[] {
-	return [
-		"    .sidebar { position: sticky; top: 0; height: 100vh; overflow: auto; padding: 28px 18px 28px 28px; border-right: 1px solid #dfdfdf; background: #f7f7f7; }",
-		"    pagefind-modal-trigger { display: block; margin-bottom: 14px; }",
-		"    pagefind-modal-trigger .pf-trigger-btn { all: unset; display: flex; align-items: center; gap: 6px; box-sizing: border-box; cursor: pointer; font-size: 15px; line-height: 1.33; color: #888; padding: 0 0 1px; }",
-		"    pagefind-modal-trigger .pf-trigger-btn:hover { color: #1a1a1a; text-decoration: underline; }",
-		"    pagefind-modal-trigger .pf-trigger-shortcut { display: flex; gap: 2px; }",
-		"    pagefind-modal-trigger .pf-trigger-key { font-size: 11px; color: #aaa; border: 1px solid #d8d8d8; border-radius: 3px; padding: 0 3px; line-height: 1.6; background: #f3f3f3; }",
-		"    .brand { margin: 0 0 18px; font-size: 28px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; }",
-		"    .brand a { color: #111; text-decoration: none; }",
-		"    .sidebar section { margin: 0 0 18px; }",
-		"    .sidebar h2 { font-size: 22px; font-weight: 600; color: #111; margin: 0 0 7px; letter-spacing: -0.01em; }",
-		"    .sidebar ul { list-style: none; margin: 0; padding: 0; }",
-		"    .sidebar li { margin: 0; padding: 0; }",
-		"    .sidebar a { display: block; padding: 0 0 1px; color: #1a1a1a; text-decoration: none; font-size: 17px; line-height: 1.28; }",
-		"    .sidebar li a { padding-left: 12px; font-size: 15px; line-height: 1.33; }",
-		"    .sidebar a.current { color: #111; font-weight: 700; }",
-		"    .sidebar a:hover { text-decoration: underline; }",
-	];
-}
-
-function renderContentStyles(): string[] {
-	return [
-		"    main { max-width: 980px; padding: 28px 52px 64px; }",
-		"    h1, h2, h3, h4 { line-height: 1.22; margin: 1.3em 0 0.45em; }",
-		"    h1 { margin-top: 0; font-size: 48px; font-weight: 300; letter-spacing: -0.02em; color: #111; }",
-		"    h2 { font-size: 30px; font-weight: 300; color: #111; }",
-		"    h3 { font-size: 22px; font-weight: 400; }",
-		"    h1 > a, h2 > a, h3 > a, h4 > a { color: inherit; text-decoration: none; }",
-		"    p, ul, ol { margin: 0.7em 0; }",
-		"    ul, ol { padding-left: 24px; }",
-		"    li { margin: 0.18em 0; }",
-		"    a { color: #0f4ea8; text-decoration: none; }",
-		"    a:hover { text-decoration: underline; }",
-		"    hr { border: 0; border-top: 1px solid #ddd; margin: 1.25rem 0; }",
-		"    blockquote { margin: 1rem 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 3px solid #d3d3d3; color: #4c4c4c; }",
-	];
-}
-
-function renderCodeStyles(): string[] {
-	return [
-		"    syntax-highlight.code-block { display: block; overflow-x: auto; white-space: pre; padding: 12px; border: 1px solid #d8d8d8; background: #ffffff; margin: 0.8em 0; color: #24292f; font-family: 'JetBrains Mono', 'Cascadia Code', Menlo, Monaco, Consolas, monospace; font-size: 0.92em; tab-size: 4; }",
-		"    ::highlight(comment), ::highlight(prolog), ::highlight(doctype), ::highlight(cdata) { color: #6a737d; font-style: italic; }",
-		"    ::highlight(punctuation) { color: #24292f; }",
-		"    ::highlight(property), ::highlight(tag), ::highlight(boolean), ::highlight(number), ::highlight(constant), ::highlight(symbol), ::highlight(deleted) { color: #005cc5; }",
-		"    ::highlight(selector), ::highlight(attr-name), ::highlight(string), ::highlight(char), ::highlight(builtin), ::highlight(inserted) { color: #032f62; }",
-		"    ::highlight(operator), ::highlight(entity), ::highlight(url), ::highlight(atrule), ::highlight(attr-value), ::highlight(keyword) { color: #d73a49; }",
-		"    ::highlight(function), ::highlight(class-name) { color: #6f42c1; }",
-		"    ::highlight(regex), ::highlight(important), ::highlight(variable) { color: #e36209; }",
-		"    code, pre { font-family: 'JetBrains Mono', 'Cascadia Code', Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }",
-		"    pre { overflow-x: auto; padding: 12px; border: 1px solid #d8d8d8; border-radius: 0; background: #fafafa; tab-size: 4; }",
-		"    :not(pre) > code { background: #f6f6f6; border: 1px solid #e0e0e0; padding: 1px 4px; border-radius: 2px; }",
-		"    .code-wrapper { position: relative; margin: 0.8em 0; }",
-		"    .code-wrapper syntax-highlight.code-block { margin: 0; }",
-		"    .copy-btn { position: absolute; top: 6px; right: 8px; padding: 2px 8px; font-size: 12px; font-family: inherit; background: #fff; border: 1px solid #c8c8c8; border-radius: 3px; cursor: pointer; opacity: 0; transition: opacity 0.15s; z-index: 1; color: #444; line-height: 1.4; }",
-		"    .code-wrapper:hover .copy-btn { opacity: 1; }",
-		"    .copy-btn:hover { background: #f0f0f0; border-color: #aaa; }",
-	];
-}
-
-function renderTableStyles(): string[] {
-	return [
-		"    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }",
-		"    th, td { border: 1px solid #d8d8d8; text-align: left; padding: 8px 10px; vertical-align: top; }",
-		"    th { background: #f7f7f7; }",
-	];
-}
-
-function renderResponsiveStyles(): string[] {
-	return [
-		"    @media (max-width: 960px) {",
-		"      .layout { display: block; }",
-		"      .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid #dfdfdf; padding: 14px 16px; background: #f7f7f7; }",
-		"      .brand { font-size: 28px; margin-bottom: 10px; }",
-		"      .sidebar h2 { font-size: 20px; }",
-		"      .sidebar a { font-size: 16px; }",
-		"      .sidebar li a { font-size: 15px; }",
-		"      main { max-width: none; padding: 20px 16px 44px; }",
-		"      h1 { font-size: 38px; }",
-		"      h2 { font-size: 28px; }",
-		"    }",
-	];
-}
-
 function renderStyles(): string {
-	return [
-		renderBaseStyles().join("\n"),
-		"",
-		renderSidebarStyles().join("\n"),
-		"",
-		renderContentStyles().join("\n"),
-		"",
-		renderCodeStyles().join("\n"),
-		"",
-		renderTableStyles().join("\n"),
-		"",
-		renderResponsiveStyles().join("\n"),
-	].join("\n");
+	return `
+    /* ── Variables ── */
+    :root {
+        --font-sans: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, Menlo, Monaco, Consolas, monospace;
+        --text: #363636;
+        --text-bright: #000;
+        --text-muted: #70777f;
+        --background: #fff;
+        --background-alt: #f7f7f7;
+        --background-code: #efefef;
+        --border: #dbdbdb;
+        --link: #0076d1;
+        --link-hover: #005a9e;
+        --highlight: #b5722a;
+        --sidebar-width: 280px;
+        --content-max-width: 900px;
+        --radius: 6px;
+        --transition: 0.15s ease;
+        color-scheme: light;
+        scrollbar-gutter: stable;
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-sans); font-size: 16px; line-height: 1.6; color: var(--text); background: var(--background); }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
+
+    /* ── Skip link ── */
+    .skip-link { position: absolute; top: -100%; left: 1rem; z-index: 10000; padding: 0.5rem 1rem; background: var(--background); border: 2px solid var(--link); border-radius: var(--radius); color: var(--link); font-weight: 600; }
+    .skip-link:focus { top: 1rem; }
+
+    /* ── Layout ── */
+    .site-wrapper { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh; background: var(--background-alt); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; z-index: 100; }
+    .sidebar-header { padding: 1.25rem 1rem 0.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; }
+    .brand-link { font-size: 1.15rem; font-weight: 700; color: var(--text-bright); text-decoration: none; letter-spacing: -0.01em; }
+    .brand-link:hover { text-decoration: none; color: var(--link); }
+    .sidebar-search { padding: 0.5rem 1rem 0.5rem; flex-shrink: 0; }
+    .sidebar-search pagefind-modal-trigger { display: block; width: 100%; }
+    .sidebar-nav { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0.25rem 0.5rem 2rem; }
+
+    /* ── Nav groups ── */
+    .nav-group { margin-top: 1.5rem; }
+    .nav-group:first-child { margin-top: 0.25rem; }
+    .nav-group-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 0.25rem 0.5rem; }
+    .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--border); margin-left: 0.5rem; }
+    .nav-list li { margin: 0; }
+    .nav-list a { display: block; padding: 5px 0.5rem; color: var(--text); font-size: 0.9rem; text-decoration: none; border-left: 2px solid transparent; margin-left: -1px; padding-left: calc(0.5rem - 1px); transition: background var(--transition), color var(--transition), border-color var(--transition); }
+    .nav-list a:hover { background: var(--background); border-left-color: var(--text-muted); text-decoration: none; color: var(--text-bright); }
+    .nav-list li.active a { border-left-color: var(--link); color: var(--link); font-weight: 500; }
+
+    /* ── Main content ── */
+    .main-content { position: relative; margin-left: var(--sidebar-width); flex: 1; padding: 2rem 2rem 4rem calc(2rem * 2); max-width: calc(var(--content-max-width) + var(--sidebar-width) + 2rem * 3); min-width: 0; }
+    .content { max-width: var(--content-max-width); }
+    .content-header h1 { margin: 0 0 1.5rem; font-size: 2rem; font-weight: 600; color: var(--text-bright); line-height: 1.2; }
+    .content-body h2 { margin: 2.5rem 0 1rem; font-size: 1.5rem; font-weight: 600; color: var(--text-bright); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .content-body h3 { margin: 1.5rem 0 0.5rem; font-size: 1.2rem; font-weight: 600; color: var(--text-bright); }
+    .content-body h4 { margin: 1.25rem 0 0.35rem; font-size: 1rem; font-weight: 600; color: var(--text-bright); }
+    .content-body :is(h2,h3,h4) { margin-top: 2.5rem; }
+    .content-body :is(h1,h2,h3,h4,h5,h6) + :is(h2,h3,h4,h5,h6) { margin-top: 0; }
+    .content-body h1 > a, .content-body h2 > a, .content-body h3 > a, .content-body h4 > a { color: inherit; text-decoration: none; }
+    .content-body p { margin: 0 0 1rem; }
+    .content-body ul, .content-body ol { margin: 0 0 1rem; padding-left: 1.5rem; }
+    .content-body li { margin: 0.25rem 0; }
+    .content-body hr { border: 0; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+    .content-body blockquote { margin: 1rem 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 3px solid var(--border); color: var(--text-muted); }
+
+    /* ── Inline code ── */
+    .content-body code { font-family: var(--font-mono); font-size: 0.9em; background: var(--background-code); padding: 0.15em 0.4em; border-radius: 4px; }
+    .content-body code:not([data-lang]) { color: var(--highlight); }
+    .content-body pre { background: var(--background-code); padding: 1rem; border-radius: var(--radius); overflow-x: auto; margin: 0 0 1rem; }
+    .content-body pre code { background: none; padding: 0; font-size: 0.875rem; line-height: 1.5; color: var(--text); }
+
+    /* ── Code blocks (web component) ── */
+    syntax-highlight.code-block { display: block; overflow-x: auto; white-space: pre; padding: 12px; border-radius: var(--radius); background: var(--background-code); margin: 0.8em 0; color: #24292f; font-family: var(--font-mono); font-size: 0.875em; tab-size: 4; }
+    ::highlight(comment), ::highlight(prolog), ::highlight(doctype), ::highlight(cdata) { color: #6a737d; font-style: italic; }
+    ::highlight(punctuation) { color: #24292f; }
+    ::highlight(property), ::highlight(tag), ::highlight(boolean), ::highlight(number), ::highlight(constant), ::highlight(symbol), ::highlight(deleted) { color: #005cc5; }
+    ::highlight(selector), ::highlight(attr-name), ::highlight(string), ::highlight(char), ::highlight(builtin), ::highlight(inserted) { color: #032f62; }
+    ::highlight(operator), ::highlight(entity), ::highlight(url), ::highlight(atrule), ::highlight(attr-value), ::highlight(keyword) { color: #d73a49; }
+    ::highlight(function), ::highlight(class-name) { color: #6f42c1; }
+    ::highlight(regex), ::highlight(important), ::highlight(variable) { color: #e36209; }
+    code, pre { font-family: var(--font-mono); font-size: 0.92em; }
+    pre { overflow-x: auto; padding: 12px; border-radius: var(--radius); background: var(--background-code); tab-size: 4; }
+    :not(pre) > code { background: var(--background-code); padding: 1px 4px; border-radius: 4px; color: var(--highlight); }
+    .code-wrapper { position: relative; margin: 0.8em 0; }
+    .code-wrapper syntax-highlight.code-block { margin: 0; }
+    .copy-btn { position: absolute; top: 6px; right: 8px; padding: 2px 8px; font-size: 12px; font-family: inherit; background: var(--background); border: 1px solid var(--border); border-radius: 3px; cursor: pointer; opacity: 0; transition: opacity 0.15s; z-index: 1; color: var(--text-muted); line-height: 1.4; }
+    .code-wrapper:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { background: var(--background-alt); }
+
+    /* ── Tables ── */
+    .content-body table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.95rem; }
+    .content-body th, .content-body td { border: 1px solid var(--border); text-align: left; padding: 0.5rem 1rem; vertical-align: top; }
+    .content-body th { background: var(--background-alt); font-weight: 600; }
+
+    /* ── TOC aside ── */
+    .toc-aside { display: none; position: absolute; top: 0; right: 2rem; width: 200px; height: 100%; }
+    .toc { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; padding-top: 2rem; }
+    .toc-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 0.25rem; padding-left: 10px; }
+    .toc ul { list-style: none; margin: 0; padding: 0; }
+    .toc ul ul { padding-left: 0.75rem; }
+    .toc li { margin: 0; }
+    .toc a { display: block; padding: 3px 0 3px 10px; color: var(--text-muted); border-left: 1.5px solid transparent; transition: color var(--transition), border-color var(--transition); font-size: 0.8rem; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .toc a:hover { color: var(--text); text-decoration: none; }
+    .toc a.is-active { color: var(--link); border-left-color: var(--link); }
+    @media (min-width: 1200px) {
+        .toc-aside { display: block; }
+        .content { max-width: calc(100vw - var(--sidebar-width) - 200px - 2rem * 4); }
+    }
+    @media (min-width: 1500px) {
+        .content { max-width: var(--content-max-width); }
+    }
+
+    /* ── Mobile nav ── */
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; color: var(--text-muted); border-radius: 5px; }
+    .menu-toggle:hover { background: var(--background-alt); color: var(--text); }
+    .icon-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: none; border-radius: 6px; background: transparent; cursor: pointer; color: var(--text-muted); transition: background var(--transition); padding: 0; font-size: 1rem; }
+    .icon-btn:hover { background: var(--background); }
+    .mobile-nav { display: none; }
+    .mobile-nav[open] { display: flex; flex-direction: column; position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh; max-width: 100vw; background: var(--background-alt); border: none; border-right: 1px solid var(--border); padding: 0; margin: 0; z-index: 1000; overflow-y: auto; color: var(--text); }
+    .mobile-nav::backdrop { background: rgba(0,0,0,0.5); }
+    .mobile-nav .sidebar-nav { flex: 1; }
+    .mobile-nav-close { font-size: 1.1rem; }
+    @media (max-width: 900px) {
+        .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); overflow: visible; flex-direction: row; align-items: center; flex-wrap: wrap; padding: 0; }
+        .sidebar-header { flex: 1; padding: 0.75rem 1rem; }
+        .sidebar-search { display: none; }
+        .sidebar-nav { display: none; }
+        .menu-toggle { display: flex; margin-right: 0.75rem; }
+        .site-wrapper { flex-direction: column; }
+        .main-content { margin-left: 0; padding: 1.5rem 1rem 3rem; max-width: 100%; }
+        .toc-aside { display: none !important; }
+    }
+
+    /* ── Focus ── */
+    .icon-btn:focus-visible, .menu-toggle:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+    .nav-list a:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }`;
 }
 
 function renderSyntaxHighlightConfigScript(): string {
@@ -311,22 +369,20 @@ function renderSyntaxHighlightConfigScript(): string {
 	].join("\n");
 }
 
+function copyCode(button: Element): void {
+	const codeBlock = button.nextElementSibling;
+	const text = codeBlock?.textContent ?? "";
+
+	navigator.clipboard.writeText(text).then(function() {
+		button.textContent = "Copied!";
+		setTimeout(function() {
+			button.textContent = "Copy";
+		}, 1_500);
+	});
+}
+
 function renderCopyCodeScript(): string {
-	return [
-		"    <script>",
-		"        function copyCode(button) {",
-		"            var codeBlock = button.nextElementSibling;",
-		"            var text = codeBlock ? codeBlock.textContent : '';",
-		"",
-		"            navigator.clipboard.writeText(text).then(function() {",
-		"                button.textContent = 'Copied!';",
-		"                setTimeout(function() {",
-		"                    button.textContent = 'Copy';",
-		"                }, 1500);",
-		"            });",
-		"        }",
-		"    </script>",
-	].join("\n");
+	return `    <script>${copyCode.toString()}</script>`;
 }
 
 function renderHead(title: string, outputRelative: string): string {
@@ -355,22 +411,180 @@ function renderFooterScripts(): string {
 	return renderCopyCodeScript();
 }
 
-function wrapHtml(title: string, sidebar: string, body: string, outputRelative: string): string {
+function buildToc(htmlBody: string): string {
+	const headingRe = /<h([23])[^>]*id="([^"]+)"[^>]*>(.*?)<\/h[23]>/gi;
+	const entries: { level: number; id: string; text: string; }[] = [];
+	let m: RegExpExecArray | null;
+	while ((m = headingRe.exec(htmlBody)) !== null) {
+		const level = parseInt(m[1], 10);
+		const id = m[2];
+		const text = m[3].replace(/<[^>]+>/g, "").trim();
+		entries.push({ level, id, text });
+	}
+	if (entries.length < 2) return "";
+
+	// Build nested list: wrap h3 entries inside a sub-ul
+	let html = "";
+	let inSub = false;
+	for (const e of entries) {
+		if (e.level === 3) {
+			if (!inSub) {
+				html += "<ul>";
+				inSub = true;
+			}
+			html += `\n        <li><a href="#${escapeHtml(e.id)}">${escapeHtml(e.text)}</a></li>`;
+		} else {
+			if (inSub) {
+				html += "\n    </ul>";
+				inSub = false;
+			}
+			html += `\n    <li><a href="#${escapeHtml(e.id)}">${escapeHtml(e.text)}</a></li>`;
+		}
+	}
+	if (inSub) html += "\n    </ul>";
+
+	return `<aside class="toc-aside">
+    <div class="toc">
+        <p class="toc-title">On this page</p>
+        <ul>${html}
+        </ul>
+    </div>
+</aside>`;
+}
+
+function tocScript(): void {
+	var toc = document.querySelector(".toc");
+	if (!toc) return;
+
+	var links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+	var headings: { el: HTMLElement; link: HTMLAnchorElement; }[] = [];
+	links.forEach(function(link) {
+		var id = link.getAttribute("href")!.slice(1);
+		var el = document.getElementById(id);
+		if (el) headings.push({ el: el, link: link });
+	});
+	if (!headings.length) return;
+
+	var current: HTMLAnchorElement | null = null;
+	function activate(link: HTMLAnchorElement | null): void {
+		if (link === current) return;
+		current = link;
+		links.forEach(function(l) {
+			l.classList.remove("is-active");
+		});
+		if (link) link.classList.add("is-active");
+	}
+
+	var ticking = false;
+	function onScroll(): void {
+		if (ticking) return;
+		ticking = true;
+		requestAnimationFrame(function() {
+			ticking = false;
+			var atBottom = (window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 50);
+			var active: HTMLAnchorElement | null = null;
+			if (atBottom) {
+				active = headings[headings.length - 1].link;
+			} else {
+				for (var i = 0; i < headings.length; i++) {
+					if (headings[i].el.getBoundingClientRect().top <= window.innerHeight * 0.35) {
+						active = headings[i].link;
+					}
+				}
+			}
+			activate(active);
+		});
+	}
+
+	var scrollBehavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+	links.forEach(function(link) {
+		link.addEventListener("click", function(e) {
+			e.preventDefault();
+			var id = link.getAttribute("href")!.slice(1);
+			var target = document.getElementById(id);
+			if (target) {
+				if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+				var top = target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.15;
+				window.scrollTo({ top: top, behavior: scrollBehavior });
+				target.focus({ preventScroll: true });
+				history.pushState(null, "", "#" + id);
+			}
+		});
+	});
+
+	window.addEventListener("scroll", onScroll, { passive: true });
+	onScroll();
+}
+
+function renderTocScript(): string {
+	return `<script>(${tocScript.toString()})()</script>`;
+}
+
+function mobileNavScript(): void {
+	var menuToggle = document.querySelector<HTMLElement>(".menu-toggle");
+	var mobileNav = document.getElementById("mobile-nav") as HTMLDialogElement | null;
+	if (!menuToggle || !mobileNav) return;
+
+	const nav = mobileNav;
+	const toggle = menuToggle;
+	toggle.addEventListener("click", function() {
+		nav.showModal();
+		toggle.setAttribute("aria-expanded", "true");
+	});
+
+	nav.addEventListener("close", function() {
+		toggle.setAttribute("aria-expanded", "false");
+		toggle.focus();
+	});
+
+	nav.addEventListener("click", function(e) {
+		if (e.target === nav) nav.close();
+	});
+
+	var closeBtn = nav.querySelector(".mobile-nav-close");
+	if (closeBtn) {
+		closeBtn.addEventListener("click", function() {
+			nav.close();
+		});
+	}
+	nav.querySelectorAll("a").forEach(function(link) {
+		link.addEventListener("click", function() {
+			nav.close();
+		});
+	});
+}
+
+function renderMobileNavScript(): string {
+	return `<script>(${mobileNavScript.toString()})()</script>`;
+}
+
+function wrapHtml(title: string, sidebar: string, body: string, outputRelative: string, toc: string): string {
 	const pagefindBundlePath = escapeHtml(path.posix.dirname(pageLink(outputRelative, "pagefind/pagefind-component-ui.css")) + "/");
 
 	return `<!doctype html>
 <html lang="en">
 ${renderHead(title, outputRelative)}
 <body>
-    <div class="layout">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="site-wrapper">
 ${sidebar}
-        <main>
+        <div class="main-content">
+            <article class="content" id="main-content">
+                <header class="content-header">
+                    <h1>${escapeHtml(title)}</h1>
+                </header>
+                <div class="content-body">
 ${body}
-        </main>
+                </div>
+            </article>
+${toc}
+        </div>
     </div>
     <pagefind-config bundle-path="${pagefindBundlePath}"></pagefind-config>
     <pagefind-modal></pagefind-modal>
 ${renderFooterScripts()}
+${renderTocScript()}
+${renderMobileNavScript()}
 </body>
 </html>`;
 }
@@ -398,10 +612,14 @@ async function build(): Promise<void> {
 
 		const markdown = await Bun.file(markdownFile).text();
 		const linkedMarkdown = rewriteMarkdownLinks(markdown);
-		const htmlBody = replaceCodeBlocksWithWebComponent(Bun.markdown.html(linkedMarkdown, markdownConf));
+		const rawHtmlBody = replaceCodeBlocksWithWebComponent(Bun.markdown.html(linkedMarkdown, markdownConf));
+
+		// Strip the first <h1> since content-header already renders the page title
+		const htmlBody = rawHtmlBody.replace(/^(\s*<h1[^>]*>[\s\S]*?<\/h1>\s*)/, "");
 		const title = pageTitleFromMarkdown(markdown, outputRelative);
 		const sidebar = renderSidebar(sidebarSections, outputRelative);
-		const html = wrapHtml(title, sidebar, htmlBody, outputRelative);
+		const toc = buildToc(htmlBody);
+		const html = wrapHtml(title, sidebar, htmlBody, outputRelative, toc);
 
 		await Bun.write(outputPath, html);
 	}
