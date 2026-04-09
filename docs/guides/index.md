@@ -13,6 +13,7 @@ Guides are task-oriented pages. Read them in order for the same progression styl
 
 ## OpenAPI and Contract Delivery
 
+- [Descriptions and Metadata](descriptions-and-metadata.md)
 - [OpenAPI and Swagger](openapi-and-swagger.md)
 - [Spec-Only Mode](spec-only-mode.md)
 - [Response Validation](response-validation.md)
