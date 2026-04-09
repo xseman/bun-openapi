@@ -192,7 +192,7 @@ function replaceCodeBlocksWithWebComponent(htmlBody: string): string {
 
 function renderBaseStyles(): string[] {
 	return [
-		"    :root { color-scheme: light; }",
+		"    :root { color-scheme: light; scrollbar-gutter: stable; }",
 		"    * { box-sizing: border-box; }",
 		"    body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; line-height: 1.55; color: #222; background: #fff; }",
 		"    .layout { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 320px minmax(0, 1fr); }",
@@ -356,6 +356,8 @@ function renderFooterScripts(): string {
 }
 
 function wrapHtml(title: string, sidebar: string, body: string, outputRelative: string): string {
+	const pagefindBundlePath = escapeHtml(path.posix.dirname(pageLink(outputRelative, "pagefind/pagefind-component-ui.css")) + "/");
+
 	return `<!doctype html>
 <html lang="en">
 ${renderHead(title, outputRelative)}
@@ -366,6 +368,7 @@ ${sidebar}
 ${body}
         </main>
     </div>
+    <pagefind-config bundle-path="${pagefindBundlePath}"></pagefind-config>
     <pagefind-modal></pagefind-modal>
 ${renderFooterScripts()}
 </body>
