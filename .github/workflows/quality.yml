@@ -42,6 +42,7 @@ permissions:
 jobs:
     test:
         runs-on: ubuntu-latest
+        if: "!startsWith(github.head_ref, 'release-please--')"
         concurrency:
             group: bun-openapi-coverage-comment-${{ github.event.pull_request.number || github.event.inputs.pr_number || github.ref }}
             cancel-in-progress: false
@@ -71,6 +72,7 @@ jobs:
 
     fmt:
         runs-on: ubuntu-latest
+        if: "!startsWith(github.head_ref, 'release-please--')"
         steps:
             - uses: actions/checkout@v4
             - uses: oven-sh/setup-bun@v2
