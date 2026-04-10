@@ -55,11 +55,11 @@ export function initModuleViewer(treeData: ModuleTreeNode): void {
 
 	const g = svg.append("g");
 
-	svg.call(
-		d3.zoom<SVGSVGElement, unknown>()
-			.scaleExtent([0.2, 3])
-			.on("zoom", (event) => g.attr("transform", event.transform)),
-	);
+	const zoom = d3.zoom<SVGSVGElement, unknown>()
+		.scaleExtent([0.2, 3])
+		.on("zoom", (event) => g.attr("transform", event.transform));
+
+	svg.call(zoom);
 
 	const layoutRoot = layoutModuleTree(treeData);
 	const xs = layoutRoot.descendants().map((d) => d.x);
@@ -68,11 +68,22 @@ export function initModuleViewer(treeData: ModuleTreeNode): void {
 	const maxX = Math.max(...xs);
 	const minY = Math.min(...ys);
 	const maxY = Math.max(...ys);
-	const treeWidth = maxY - minY + 300;
-	const treeHeight = maxX - minX + 100;
-	const tx = (width - treeWidth) / 2 - minY + 50;
-	const ty = (height - treeHeight) / 2 - minX + 50;
-	g.attr("transform", `translate(${tx}, ${ty})`);
+
+	const pad = 40;
+	const labelPad = 180;
+	const contentWidth = maxY - minY + labelPad;
+	const contentHeight = maxX - minX;
+	const scale = Math.min(
+		Math.min((width - pad * 2) / contentWidth, (height - pad * 2) / contentHeight),
+		3,
+	);
+	const clampedScale = Math.max(0.2, scale);
+	const centerY = (minY + maxY + labelPad) / 2;
+	const centerX = (minX + maxX) / 2;
+	const tx = width / 2 - clampedScale * centerY;
+	const ty = height / 2 - clampedScale * centerX;
+
+	svg.call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(clampedScale));
 
 	g.selectAll(".link")
 		.data(layoutRoot.links())
