@@ -35,10 +35,10 @@ dispatch — providing a Bun-native experience with broad ecosystem compatibilit
 - Built-in [Swagger UI](#swagger-ui) and [Module Viewer](#module-viewer) (self-contained, no CDN)
 - Spec-only mode, YAML/JSON file output, and strict module import validation
 
-| Swagger UI                                                                                                                                                                                                                                      | Module Viewer                                                                                                                                                |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Auto-generated interactive API docs at `/docs/swagger/`. Explore endpoints, inspect schemas, and try requests in the browser. OpenAPI JSON at `/docs/swagger/openapi.json`. See [dependency-injection example](examples/dependency-injection/). | Visual dependency graph of your module tree at `/docs/modules/`. Shows modules, controllers, providers, and methods in an interactive force-directed layout. |
-| ![Swagger UI](docs/assets/swagger-ui.png)                                                                                                                                                                                                       | ![Module Viewer](docs/assets/module-viewer.png)                                                                                                              |
+| Swagger UI                                                                                                                                                                                                                                         | Module Viewer                                                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Auto-generated interactive API docs at `/docs/swagger/`. Explore endpoints, inspect schemas, and try requests in the browser. OpenAPI JSON at `/docs/swagger/openapi.json`. See [dependency-injection example](examples/04_dependency-injection/). | Visual dependency graph of your module tree at `/docs/modules/`. Shows modules, controllers, providers, and methods in an interactive force-directed layout. |
+| ![Swagger UI](docs/assets/swagger-ui.png)                                                                                                                                                                                                          | ![Module Viewer](docs/assets/module-viewer.png)                                                                                                              |
 
 ## Install
 
@@ -66,16 +66,20 @@ bun add valibot @valibot/to-json-schema
 
 Runnable examples default to `class-validator` DTOs unless the adapter choice is the feature being demonstrated.
 
-- **[basic](examples/basic/)** — CRUD API with schemas, HTTP exceptions, a global error formatter, and Swagger UI
-- **[class-validator](examples/class-validator/)** — DTO-based validation and OpenAPI generation with `class-validator`
-- **[complex](examples/complex/)** — Multi-module app with DI, middleware, Swagger UI, and the module viewer
-- **[dependency-injection](examples/dependency-injection/)** — Constructor and token-based injection with providers plus `decorator-toolkit/*/legacy` service decorators
-- **[guards](examples/guards/)** — `@UseGuards(...)`, runtime `@Security(...)` enforcement, custom guard responses, and formatted errors
-- **[interceptors](examples/interceptors/)** — `@UseInterceptors(...)` for response envelopes, cached `Response` short-circuiting, and response validation
-- **[logging](examples/logging/)** — `AsyncLocalStorage` request context with optional `x-user-id` and `x-session-id` headers plus automatic endpoint caller tags like `ItemController.create` across `await` boundaries
-- **[modules](examples/modules/)** — Nest-style modules with exported provider sharing and private provider boundaries
-- **[multi-controller](examples/multi-controller/)** — Multiple controllers, operation IDs, `@Deprecated`, `@Hidden`, and `@Produces`
-- **[security](examples/security/)** — Bearer auth with `@Security(...)` plus runtime `securityGuards`
+- **[01_hello-world](examples/01_hello-world/)** — Minimal single-route server
+- **[02_crud](examples/02_crud/)** — CRUD API with schemas, HTTP exceptions, a global error formatter, and Swagger UI
+- **[03_multi-controller](examples/03_multi-controller/)** — Multiple controllers, operation IDs, `@Deprecated`, `@Hidden`, and `@Produces`
+- **[04_dependency-injection](examples/04_dependency-injection/)** — Constructor and token-based injection with providers plus `decorator-toolkit/*/legacy` service decorators
+- **[05_modules](examples/05_modules/)** — Nest-style modules with exported provider sharing and private provider boundaries
+- **[06_guards](examples/06_guards/)** — `@UseGuards(...)`, runtime `@Security(...)` enforcement, custom guard responses, and formatted errors
+- **[07_interceptors](examples/07_interceptors/)** — `@UseInterceptors(...)` for response envelopes, cached `Response` short-circuiting, and response validation
+- **[08_logging](examples/08_logging/)** — `AsyncLocalStorage` request context with optional `x-user-id` and `x-session-id` headers plus automatic endpoint caller tags like `ItemController.create` across `await` boundaries
+- **[09_complex](examples/09_complex/)** — Multi-module app with DI, middleware, Swagger UI, and the module viewer
+- **[10_mvc](examples/10_mvc/)** — Server-side rendering with `@Render` and Handlebars
+- **[11_jwt-auth](examples/11_jwt-auth/)** — JWT Bearer API auth with TypeORM, Bun.password, and jose
+- **[12_form-auth](examples/12_form-auth/)** — Form-based web auth with JWT-in-cookie and Handlebars views
+- **[13_typeorm-relations](examples/13_typeorm-relations/)** — TypeORM one-to-many / many-to-one relations
+- **[14_session-auth](examples/14_session-auth/)** — Stateful server-side sessions with HttpOnly cookie and Handlebars
 
 ## Quick start
 
@@ -277,7 +281,7 @@ Available built-ins:
 
 Validation failures from `@Param`, `@Query`, `@Header`, and `@Body` also flow through the same error pipeline.
 
-See `examples/basic/` for a runnable CRUD example that uses `NotFoundException` and a global `errorFormatter`.
+See `examples/02_crud/` for a runnable CRUD example that uses `NotFoundException` and a global `errorFormatter`.
 
 To standardize error responses globally, provide `errorFormatter` in `createApp()`:
 
@@ -355,7 +359,7 @@ const app = createApp({
 
 If a configured security guard returns `false`, the request is rejected with `401 Unauthorized`.
 
-See `examples/guards/` for a focused runnable example that combines `@UseGuards(...)`, custom guard responses, `ForbiddenException`, and runtime `securityGuards`.
+See `examples/06_guards/` for a focused runnable example that combines `@UseGuards(...)`, custom guard responses, `ForbiddenException`, and runtime `securityGuards`.
 
 ## Interceptors
 
@@ -401,7 +405,7 @@ Interceptor behavior:
 - Returning a `Response` short-circuits response serialization entirely.
 - Throwing an error uses the same error formatter pipeline as controllers.
 
-See `examples/interceptors/` for a focused example that combines envelope transformation, `Response` short-circuiting, and response validation.
+See `examples/07_interceptors/` for a focused example that combines envelope transformation, `Response` short-circuiting, and response validation.
 
 ## Response validation
 
@@ -607,7 +611,7 @@ index page with links to the configured documentation endpoints.
 The complex example uses this mode:
 
 ```sh
-bun run examples/complex/server.ts
+bun run examples/09_complex/server.ts
 ```
 
 Then open `/docs/modules/` to inspect modules, controllers, providers, methods,
