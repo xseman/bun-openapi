@@ -1,6 +1,6 @@
 {
 	"name": "bun-openapi",
-	"description": "Help you generate OpenAPI definitions via Typescript (Bun-native port)",
+	"description": "Build OpenAPI-compliant REST APIs using TypeScript and Bun.serve()",
 	"type": "module",
 	"version": "0.0.1",
 	"license": "Apache-2.0",
@@ -73,9 +73,10 @@
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.15.1",
 		"class-validator-jsonschema": "^5.1.0",
-		"decorator-toolkit": "^0.3.0",
+		"decorator-toolkit": "^0.4.0",
 		"dprint": "~0.53.2",
 		"handlebars": "^4.7.9",
+		"jose": "^6.2.2",
 		"pagefind": "^1.5.0",
 		"swagger-ui-dist": "^5.32.2",
 		"typescript": "~6.0.2"

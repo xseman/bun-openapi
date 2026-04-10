@@ -83,5 +83,4 @@ All adapters produce the same result: runtime validation + OpenAPI JSON Schema o
 
 ## Example Projects
 
-- [examples/basic/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/server.ts)
-- [examples/class-validator/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/class-validator/server.ts)
+- [examples/02_crud/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/02_crud/server.ts)

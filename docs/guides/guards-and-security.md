@@ -57,4 +57,4 @@ const app = createApp({
 
 ## Example
 
-See [examples/guards/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/guards/server.ts) and [examples/security/controller.ts](https://github.com/xseman/bun-openapi/blob/master/examples/security/controller.ts).
+See [examples/06_guards/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/06_guards/server.ts) and [examples/06_guards/controllers.ts](https://github.com/xseman/bun-openapi/blob/master/examples/06_guards/controllers.ts).
