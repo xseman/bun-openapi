@@ -1,4 +1,5 @@
 import {
+	type CanActivate,
 	Controller,
 	Get,
 	Hidden,
@@ -7,7 +8,6 @@ import {
 	Request,
 	Route,
 	UseGuards,
-	type CanActivate,
 } from "../../src/index.js";
 import { UserService } from "./user.service.js";
 
@@ -90,7 +90,7 @@ export class RegistrationController extends Controller {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				location: "/dashboard",
+				"location": "/dashboard",
 				"set-cookie": buildCookieHeader(result.token!),
 			},
 		});
@@ -122,7 +122,7 @@ export class RegistrationController extends Controller {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				location: "/dashboard",
+				"location": "/dashboard",
 				"set-cookie": buildCookieHeader(result.token!),
 			},
 		});
@@ -151,7 +151,7 @@ export class RegistrationController extends Controller {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				location: "/login",
+				"location": "/login",
 				"set-cookie": clearCookieHeader(),
 			},
 		});

@@ -1,10 +1,17 @@
 import { cacheAsync } from "decorator-toolkit/cache-async/legacy";
 import { rateLimit } from "decorator-toolkit/rate-limit/legacy";
 import { timeout } from "decorator-toolkit/timeout/legacy";
-import { SignJWT, jwtVerify } from "jose";
+import {
+	jwtVerify,
+	SignJWT,
+} from "jose";
 import { Repository } from "typeorm";
 
-import { ConflictException, Injectable, UnauthorizedException } from "../../src/index.js";
+import {
+	ConflictException,
+	Injectable,
+	UnauthorizedException,
+} from "../../src/index.js";
 import { AppDataSource } from "./data-source.js";
 import { User } from "./entities/user.entity.js";
 

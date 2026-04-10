@@ -1,7 +1,11 @@
 import { rateLimit } from "decorator-toolkit/rate-limit/legacy";
 import { Repository } from "typeorm";
 
-import { ConflictException, Injectable, UnauthorizedException } from "../../src/index.js";
+import {
+	ConflictException,
+	Injectable,
+	UnauthorizedException,
+} from "../../src/index.js";
 import { AppDataSource } from "./data-source.js";
 import { User } from "./entities/user.entity.js";
 

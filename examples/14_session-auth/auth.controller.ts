@@ -92,7 +92,7 @@ export class AuthController extends Controller {
 			return new Response(null, {
 				status: 302,
 				headers: {
-					location: "/dashboard",
+					"location": "/dashboard",
 					"set-cookie": setCookieHeader(sid),
 				},
 			});
@@ -126,7 +126,7 @@ export class AuthController extends Controller {
 			return new Response(null, {
 				status: 302,
 				headers: {
-					location: "/dashboard",
+					"location": "/dashboard",
 					"set-cookie": setCookieHeader(sid),
 				},
 			});
@@ -164,7 +164,7 @@ export class AuthController extends Controller {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				location: "/login",
+				"location": "/login",
 				"set-cookie": clearCookieHeader(),
 			},
 		});

@@ -1,4 +1,9 @@
-import { IsDateString, IsEmail, IsString, MinLength } from "class-validator";
+import {
+	IsDateString,
+	IsEmail,
+	IsString,
+	MinLength,
+} from "class-validator";
 
 export class RegisterBody {
 	@IsEmail()

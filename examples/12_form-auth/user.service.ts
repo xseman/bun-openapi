@@ -1,4 +1,7 @@
-import { SignJWT, jwtVerify } from "jose";
+import {
+	jwtVerify,
+	SignJWT,
+} from "jose";
 import { Repository } from "typeorm";
 
 import { Injectable } from "../../src/index.js";
@@ -17,7 +20,7 @@ export class UserService {
 		this.#repo = AppDataSource.getRepository(User);
 	}
 
-	async register(name: string, email: string, password: string): Promise<{ token: string; error?: never } | { error: string; token?: never }> {
+	async register(name: string, email: string, password: string): Promise<{ token: string; error?: never; } | { error: string; token?: never; }> {
 		const existing = await this.#repo.findOneBy({ email: email });
 		if (existing) {
 			return { error: "Email already registered" };
@@ -30,7 +33,7 @@ export class UserService {
 		return { token: await this.#signToken(user.id) };
 	}
 
-	async login(email: string, password: string): Promise<{ token: string; error?: never } | { error: string; token?: never }> {
+	async login(email: string, password: string): Promise<{ token: string; error?: never; } | { error: string; token?: never; }> {
 		const user = await this.#repo.findOneBy({ email: email });
 		if (!user) {
 			return { error: "Invalid email or password" };

@@ -1,6 +1,9 @@
 import { Repository } from "typeorm";
 
-import { Injectable, NotFoundException } from "../../src/index.js";
+import {
+	Injectable,
+	NotFoundException,
+} from "../../src/index.js";
 import { AppDataSource } from "./data-source.js";
 import { Post } from "./entities/post.entity.js";
 import { User } from "./entities/user.entity.js";

@@ -3,7 +3,10 @@ import "reflect-metadata";
 import { classValidator } from "../../src/adapters/class-validator.js";
 import { HandlebarsAdapter } from "../../src/adapters/handlebars.js";
 import { createApp } from "../../src/index.js";
-import { AuthController, SessionGuard } from "./auth.controller.js";
+import {
+	AuthController,
+	SessionGuard,
+} from "./auth.controller.js";
 import { AuthService } from "./auth.service.js";
 import { AppDataSource } from "./data-source.js";
 import { SessionStore } from "./session-store.js";
