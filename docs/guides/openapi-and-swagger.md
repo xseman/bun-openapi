@@ -59,4 +59,4 @@ const spec = buildSpec([UserController], classValidator(), {
 
 ## Example
 
-See [examples/basic/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/server.ts).
+See [examples/02_crud/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/02_crud/server.ts).

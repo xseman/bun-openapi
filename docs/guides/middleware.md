@@ -32,4 +32,4 @@ Middleware wraps the route before guards, interceptors, and controller execution
 
 ## Example
 
-See [examples/logging/request-context.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/request-context.ts) and [examples/logging/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/server.ts).
+See [examples/08_logging/request-context.ts](https://github.com/xseman/bun-openapi/blob/master/examples/08_logging/request-context.ts) and [examples/08_logging/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/08_logging/server.ts).

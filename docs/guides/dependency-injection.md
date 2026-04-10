@@ -39,6 +39,6 @@ Use request scope for providers that must be recreated per request.
 
 ## Example
 
-See [examples/dependency-injection/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/dependency-injection/server.ts).
+See [examples/04_dependency-injection/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/04_dependency-injection/server.ts).
 That example can also enable `moduleViewer: true`; because it uses direct
 app-level providers instead of `imports`, the viewer renders an `App` root.

@@ -38,4 +38,4 @@ If validateResponse is enabled, transformed output still needs to match the decl
 
 ## Example
 
-See [examples/interceptors/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/interceptors/server.ts).
+See [examples/07_interceptors/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/07_interceptors/server.ts).

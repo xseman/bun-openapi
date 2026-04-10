@@ -1,0 +1,16 @@
+{
+	"name": "bun-openapi-example-13-typeorm-relations",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run server.ts"
+	},
+	"dependencies": {
+		"class-validator": "*",
+		"sql.js": "^1.14.1",
+		"typeorm": "*"
+	},
+	"devDependencies": {
+		"@types/sql.js": "^1.4.11"
+	}
+}

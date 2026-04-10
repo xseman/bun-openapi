@@ -1,0 +1,12 @@
+{
+	"name": "bun-openapi-example-10-mvc",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run server.ts"
+	},
+	"dependencies": {
+		"class-validator": "*",
+		"handlebars": "*"
+	}
+}

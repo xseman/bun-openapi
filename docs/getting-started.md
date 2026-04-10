@@ -149,4 +149,4 @@ Now that you have a running API, explore deeper topics:
 
 ## Runnable Example
 
-See [examples/basic/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/server.ts) for a complete working setup.
+See [examples/02_crud/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/02_crud/server.ts) for a complete working setup.

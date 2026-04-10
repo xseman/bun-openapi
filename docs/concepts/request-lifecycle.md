@@ -39,4 +39,4 @@ bun-openapi stores endpoint metadata in async local storage:
 
 Use getCallerContext() in logging and metrics helpers to label output without manually passing method names.
 
-Example usage is available in [examples/logging/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/logging/server.ts).
+Example usage is available in [examples/08_logging/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/08_logging/server.ts).

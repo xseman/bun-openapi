@@ -1,0 +1,17 @@
+{
+	"name": "bun-openapi-example-11-jwt-auth",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"start": "bun run server.ts"
+	},
+	"dependencies": {
+		"class-validator": "*",
+		"jose": "*",
+		"sql.js": "^1.14.1",
+		"typeorm": "*"
+	},
+	"devDependencies": {
+		"@types/sql.js": "^1.4.11"
+	}
+}

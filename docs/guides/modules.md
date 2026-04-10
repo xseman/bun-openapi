@@ -45,4 +45,4 @@ nodes under an `App` root.
 
 ## Example
 
-See [examples/modules/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/modules/server.ts) and [examples/complex/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/complex/server.ts).
+See [examples/05_modules/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/05_modules/server.ts) and [examples/09_complex/server.ts](https://github.com/xseman/bun-openapi/blob/master/examples/09_complex/server.ts).

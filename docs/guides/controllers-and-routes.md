@@ -83,5 +83,5 @@ const app = createApp({
 ## See Also
 
 - [Descriptions and Metadata](descriptions-and-metadata.md) — making your API docs richer.
-- [examples/basic/controller.ts](https://github.com/xseman/bun-openapi/blob/master/examples/basic/controller.ts)
-- [examples/multi-controller/controllers.ts](https://github.com/xseman/bun-openapi/blob/master/examples/multi-controller/controllers.ts)
+- [examples/02_crud/controller.ts](https://github.com/xseman/bun-openapi/blob/master/examples/02_crud/controller.ts)
+- [examples/03_multi-controller/controllers.ts](https://github.com/xseman/bun-openapi/blob/master/examples/03_multi-controller/controllers.ts)
