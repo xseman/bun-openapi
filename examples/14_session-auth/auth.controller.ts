@@ -4,6 +4,7 @@ import {
 	Get,
 	Hidden,
 	Injectable,
+	Post,
 	Render,
 	Request,
 	Route,
@@ -27,12 +28,14 @@ function sidFromCookie(request: globalThis.Request): string | null {
 	return null;
 }
 
+const SECURE = process.env["NODE_ENV"] === "production" ? "; Secure" : "";
+
 function setCookieHeader(sessionId: string): string {
-	return `${COOKIE_NAME}=${sessionId}; HttpOnly; SameSite=Strict; Path=/; Max-Age=7200`;
+	return `${COOKIE_NAME}=${sessionId}; HttpOnly; SameSite=Strict; Path=/; Max-Age=7200${SECURE}`;
 }
 
 function clearCookieHeader(): string {
-	return `${COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
+	return `${COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${SECURE}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -80,11 +83,12 @@ export class AuthController extends Controller {
 	}
 
 	@Hidden()
-	@Get("/register/submit")
+	@Post("/register/submit")
 	async submitRegister(@Request() request: globalThis.Request) {
-		const url = new URL(request.url);
-		const email = url.searchParams.get("email") ?? "";
-		const password = url.searchParams.get("password") ?? "";
+		const {
+			email = "",
+			password = "",
+		} = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		try {
 			const user = await this.authService.register(email, password);
@@ -114,11 +118,9 @@ export class AuthController extends Controller {
 	}
 
 	@Hidden()
-	@Get("/login/submit")
+	@Post("/login/submit")
 	async submitLogin(@Request() request: globalThis.Request) {
-		const url = new URL(request.url);
-		const email = url.searchParams.get("email") ?? "";
-		const password = url.searchParams.get("password") ?? "";
+		const { email = "", password = "" } = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		try {
 			const user = await this.authService.login(email, password);
@@ -146,11 +148,18 @@ export class AuthController extends Controller {
 	@Render("dashboard")
 	async dashboard(@Request() request: globalThis.Request) {
 		const sid = sidFromCookie(request)!;
-		const userId = this.sessions.get(sid)!;
+		const userId = this.sessions.get(sid);
+		if (!userId) {
+			return Response.redirect("/login", 302);
+		}
 		const user = await this.authService.findById(userId);
+		if (!user) {
+			this.sessions.destroy(sid);
+			return Response.redirect("/login", 302);
+		}
 		return {
 			title: "Dashboard",
-			email: user!.email,
+			email: user.email,
 		};
 	}
 

@@ -6,22 +6,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{title}}</title>
     <style>
-        body { font-family: sans-serif; max-width: 420px; margin: 80px auto; padding: 0 20px; }
-        h1 { color: #4f46e5; }
-        label { display: block; margin-top: 12px; font-size: 0.875rem; color: #374151; }
-        input { width: 100%; box-sizing: border-box; padding: 8px 10px; margin-top: 4px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
-        button { margin-top: 20px; width: 100%; padding: 10px; background: #4f46e5; color: #fff; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
-        button:hover { background: #4338ca; }
-        .error { color: #dc2626; font-size: 0.875rem; margin-top: 12px; }
-        .link { margin-top: 16px; font-size: 0.875rem; color: #6b7280; }
-        .link a { color: #4f46e5; }
+        body {
+            font-family: sans-serif;
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #4f46e5;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            margin-top: 4px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 12px;
+        }
+
+        .link {
+            margin-top: 16px;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .link a {
+            color: #4f46e5;
+        }
     </style>
 </head>
 
 <body>
     <h1>Create account</h1>
     {{#if error}}<p class="error">{{error}}</p>{{/if}}
-    <form method="get" action="/register/submit">
+    <form method="post" action="/register/submit">
         <label>Email
             <input type="email" name="email" required autocomplete="email" />
         </label>

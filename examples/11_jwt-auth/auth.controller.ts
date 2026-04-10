@@ -9,6 +9,7 @@ import {
 	Security,
 	Summary,
 	Tags,
+	UnauthorizedException,
 } from "../../src/index.js";
 import { AuthService } from "./auth.service.js";
 import {
@@ -55,10 +56,13 @@ export class AuthController extends Controller {
 		const [, token] = req.headers.get("authorization")?.split(" ") ?? [];
 		const userId = await this.authService.verifyToken(token ?? "");
 		const user = userId ? await this.authService.findById(userId) : null;
+		if (!user) {
+			throw new UnauthorizedException("Unauthorized");
+		}
 		return {
-			id: user!.id,
-			email: user!.email,
-			createdAt: user!.createdAt.toISOString(),
+			id: user.id,
+			email: user.email,
+			createdAt: user.createdAt.toISOString(),
 		};
 	}
 }

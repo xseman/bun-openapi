@@ -4,6 +4,7 @@ import {
 	Get,
 	Hidden,
 	Injectable,
+	Post,
 	Render,
 	Request,
 	Route,
@@ -13,19 +14,23 @@ import { UserService } from "./user.service.js";
 
 const COOKIE_NAME = "token";
 
+const SECURE = process.env["NODE_ENV"] === "production" ? "; Secure" : "";
+
 function buildCookieHeader(token: string): string {
-	return `${COOKIE_NAME}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=7200`;
+	return `${COOKIE_NAME}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=7200${SECURE}`;
 }
 
 function clearCookieHeader(): string {
-	return `${COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
+	return `${COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${SECURE}`;
 }
 
 function tokenFromCookie(request: Request): string | null {
 	const cookieHeader = request.headers.get("cookie") ?? "";
 	for (const part of cookieHeader.split(";")) {
-		const [key, value] = part.trim().split("=");
-		if (key === COOKIE_NAME) return value ?? null;
+		const trimmed = part.trim();
+		const eq = trimmed.indexOf("=");
+		if (eq === -1) continue;
+		if (trimmed.slice(0, eq) === COOKIE_NAME) return trimmed.slice(eq + 1) || null;
 	}
 	return null;
 }
@@ -72,12 +77,13 @@ export class RegistrationController extends Controller {
 	}
 
 	@Hidden()
-	@Get("/register/submit")
+	@Post("/register/submit")
 	async submitRegister(@Request() request: globalThis.Request) {
-		const url = new URL(request.url);
-		const name = url.searchParams.get("name") ?? "";
-		const email = url.searchParams.get("email") ?? "";
-		const password = url.searchParams.get("password") ?? "";
+		const {
+			name = "",
+			email = "",
+			password = "",
+		} = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		const result = await this.userService.register(name, email, password);
 		if (result.error) {
@@ -105,11 +111,9 @@ export class RegistrationController extends Controller {
 	}
 
 	@Hidden()
-	@Get("/login/submit")
+	@Post("/login/submit")
 	async submitLogin(@Request() request: globalThis.Request) {
-		const url = new URL(request.url);
-		const email = url.searchParams.get("email") ?? "";
-		const password = url.searchParams.get("password") ?? "";
+		const { email = "", password = "" } = Object.fromEntries(await request.formData()) as Record<string, string>;
 
 		const result = await this.userService.login(email, password);
 		if (result.error) {
@@ -136,10 +140,13 @@ export class RegistrationController extends Controller {
 	async dashboard(@Request() request: globalThis.Request) {
 		const token = tokenFromCookie(request)!;
 		const user = await this.userService.verifyToken(token);
+		if (!user) {
+			return Response.redirect("/login", 302);
+		}
 		return {
 			title: "Dashboard",
-			name: user!.name,
-			email: user!.email,
+			name: user.name,
+			email: user.email,
 		};
 	}
 

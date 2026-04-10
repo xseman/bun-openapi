@@ -1,10 +1,13 @@
+import { Type } from "class-transformer";
 import {
+	IsArray,
 	IsBoolean,
 	IsDateString,
 	IsEmail,
 	IsOptional,
 	IsString,
 	MinLength,
+	ValidateNested,
 } from "class-validator";
 
 export class UserParams {
@@ -95,6 +98,9 @@ export class PostDto {
 }
 
 export class UserWithPostsDto extends UserDto {
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => PostDto)
 	posts!: PostDto[];
 }
 

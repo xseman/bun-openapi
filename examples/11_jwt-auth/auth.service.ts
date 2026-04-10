@@ -27,7 +27,7 @@ export class AuthService {
 		this.#repo = AppDataSource.getRepository(User);
 	}
 
-	// Limit registration attempts: max 5 per IP per minute
+	// Limit registration attempts: max 5 globally per minute
 	@rateLimit<AuthService, [string, string]>({
 		allowedCalls: 5,
 		timeSpanMs: 60_000,
@@ -46,7 +46,7 @@ export class AuthService {
 		return this.#signToken(user.id);
 	}
 
-	// Limit login attempts: max 10 per minute globally
+	// Limit login attempts: max 10 per email address per minute
 	@rateLimit<AuthService, [string, string]>({
 		allowedCalls: 10,
 		timeSpanMs: 60_000,
