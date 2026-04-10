@@ -2,10 +2,12 @@ import {
 	jwtVerify,
 	SignJWT,
 } from "jose";
-import { Repository } from "typeorm";
+import {
+	DataSource,
+	Repository,
+} from "typeorm";
 
 import { Injectable } from "../../src/index.js";
-import { AppDataSource } from "./data-source.js";
 import { User } from "./entities/user.entity.js";
 
 const JWT_SECRET = new TextEncoder().encode("demo-secret-change-in-production");
@@ -16,8 +18,8 @@ const JWT_EXPIRY = "2h";
 export class UserService {
 	#repo: Repository<User>;
 
-	constructor() {
-		this.#repo = AppDataSource.getRepository(User);
+	constructor(dataSource: DataSource) {
+		this.#repo = dataSource.getRepository(User);
 	}
 
 	async register(name: string, email: string, password: string): Promise<{ token: string; error?: never; } | { error: string; token?: never; }> {

@@ -1,10 +1,12 @@
-import { Repository } from "typeorm";
+import {
+	DataSource,
+	Repository,
+} from "typeorm";
 
 import {
 	Injectable,
 	NotFoundException,
 } from "../../src/index.js";
-import { AppDataSource } from "./data-source.js";
 import { Post } from "./entities/post.entity.js";
 import { User } from "./entities/user.entity.js";
 
@@ -13,9 +15,9 @@ export class UserService {
 	#users: Repository<User>;
 	#posts: Repository<Post>;
 
-	constructor() {
-		this.#users = AppDataSource.getRepository(User);
-		this.#posts = AppDataSource.getRepository(Post);
+	constructor(dataSource: DataSource) {
+		this.#users = dataSource.getRepository(User);
+		this.#posts = dataSource.getRepository(Post);
 	}
 
 	async createUser(name: string, email: string): Promise<User> {

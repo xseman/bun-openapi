@@ -5,14 +5,16 @@ import {
 	jwtVerify,
 	SignJWT,
 } from "jose";
-import { Repository } from "typeorm";
+import {
+	DataSource,
+	Repository,
+} from "typeorm";
 
 import {
 	ConflictException,
 	Injectable,
 	UnauthorizedException,
 } from "../../src/index.js";
-import { AppDataSource } from "./data-source.js";
 import { User } from "./entities/user.entity.js";
 
 const JWT_SECRET = new TextEncoder().encode("demo-secret-change-in-production");
@@ -23,8 +25,8 @@ const JWT_EXPIRY = "1h";
 export class AuthService {
 	#repo: Repository<User>;
 
-	constructor() {
-		this.#repo = AppDataSource.getRepository(User);
+	constructor(dataSource: DataSource) {
+		this.#repo = dataSource.getRepository(User);
 	}
 
 	// Limit registration attempts: max 5 globally per minute

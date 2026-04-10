@@ -1,5 +1,7 @@
 import "reflect-metadata";
 
+import { DataSource } from "typeorm";
+
 import { classValidator } from "../../src/adapters/class-validator.js";
 import {
 	type CanActivateSecurity,
@@ -38,7 +40,7 @@ const app = createApp({
 	schema: classValidator(),
 	swagger: true,
 	controllers: [AuthController],
-	providers: [AuthService],
+	providers: [AuthService, { provide: DataSource, useValue: AppDataSource }],
 	securityGuards: {
 		bearerAuth: JwtAuthGuard,
 	},

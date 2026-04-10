@@ -1,5 +1,7 @@
 import "reflect-metadata";
 
+import { DataSource } from "typeorm";
+
 import { classValidator } from "../../src/adapters/class-validator.js";
 import { createApp } from "../../src/index.js";
 import {
@@ -18,7 +20,7 @@ const app = createApp({
 	schema: classValidator(),
 	swagger: true,
 	controllers: [UsersController, PostsController, PublishedController],
-	providers: [UserService],
+	providers: [UserService, { provide: DataSource, useValue: AppDataSource }],
 	openapi: {
 		service: {
 			name: "typeorm-relations",

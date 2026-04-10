@@ -1,20 +1,22 @@
 import { rateLimit } from "decorator-toolkit/rate-limit/legacy";
-import { Repository } from "typeorm";
+import {
+	DataSource,
+	Repository,
+} from "typeorm";
 
 import {
 	ConflictException,
 	Injectable,
 	UnauthorizedException,
 } from "../../src/index.js";
-import { AppDataSource } from "./data-source.js";
 import { User } from "./entities/user.entity.js";
 
 @Injectable()
 export class AuthService {
 	#repo: Repository<User>;
 
-	constructor() {
-		this.#repo = AppDataSource.getRepository(User);
+	constructor(dataSource: DataSource) {
+		this.#repo = dataSource.getRepository(User);
 	}
 
 	@rateLimit<AuthService, [string, string]>({

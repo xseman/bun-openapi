@@ -1,5 +1,6 @@
 import "reflect-metadata";
 
+import { DataSource } from "typeorm";
 import { classValidator } from "../../src/adapters/class-validator.js";
 import { HandlebarsAdapter } from "../../src/adapters/handlebars.js";
 import { createApp } from "../../src/index.js";
@@ -18,7 +19,7 @@ const port = 3_000;
 const app = createApp({
 	schema: classValidator(),
 	controllers: [AuthController],
-	providers: [AuthService, SessionStore, SessionGuard],
+	providers: [AuthService, SessionStore, SessionGuard, { provide: DataSource, useValue: AppDataSource }],
 	viewEngine: {
 		viewsDir: new URL("./views", import.meta.url).pathname,
 		adapter: new HandlebarsAdapter(),
