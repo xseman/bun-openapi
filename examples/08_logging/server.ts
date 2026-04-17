@@ -12,7 +12,7 @@ const app = createApp({
 	controllers: [ItemController],
 	providers: [Logger, ItemService],
 	middlewares: [requestContextMiddleware],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		service: {
 			name: "logging",

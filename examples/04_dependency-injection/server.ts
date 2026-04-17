@@ -6,8 +6,7 @@ import { UserService } from "./service.js";
 const port = 3_000;
 
 const app = createApp({
-	swagger: true,
-	moduleViewer: true,
+	docs: true,
 	schema: classValidator(),
 	controllers: [UserController],
 	providers: [

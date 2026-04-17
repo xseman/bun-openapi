@@ -20,6 +20,7 @@ Runnable examples are under the repository `examples/` directory. They are numbe
 | [12_form-auth](https://github.com/xseman/bun-openapi/tree/master/examples/12_form-auth/)                       | Form-based web auth with JWT-in-cookie, DataSource DI, and Handlebars views       |
 | [13_typeorm-relations](https://github.com/xseman/bun-openapi/tree/master/examples/13_typeorm-relations/)       | TypeORM one-to-many / many-to-one relations with DataSource DI                    |
 | [14_session-auth](https://github.com/xseman/bun-openapi/tree/master/examples/14_session-auth/)                 | Stateful server-side sessions with HttpOnly cookie, DataSource DI, and Handlebars |
+| [15_request-scope](https://github.com/xseman/bun-openapi/tree/master/examples/15_request-scope/)               | Request-scoped DI with `@Injectable({ scope: "request" })` for per-request state  |
 
 ## How To Run An Example
 

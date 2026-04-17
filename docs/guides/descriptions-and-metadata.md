@@ -152,4 +152,4 @@ This produces a rich Swagger UI entry with clear descriptions, typed response sc
 
 - [Decorator Reference](../reference/decorators.md) — full list of all decorators.
 - [OpenAPI and Swagger](openapi-and-swagger.md) — configuring the spec and Swagger UI.
-- [examples/03_multi-controller](https://github.com/xseman/bun-openapi/blob/master/examples/03_multi-controller/) — example using metadata decorators.
+- [examples/03_multi-controller](https://github.com/xseman/bun-openapi/tree/master/examples/03_multi-controller/) — example using metadata decorators.

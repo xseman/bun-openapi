@@ -29,5 +29,5 @@ Use this checklist before production deployment.
 
 ## Documentation
 
-- Enable swagger for environment where docs should be served.
+- Enable `docs` for environments where docs should be served.
 - Write OpenAPI spec to disk through openapi.filePath for CI artifacts.

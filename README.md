@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-	<a href="./docs/index.md">Documentation</a> |
-	<a href="./docs/getting-started.md">Getting started</a> |
-	<a href="./docs/guides/index.md">Guides</a> |
-	<a href="./docs/reference/index.md">Reference</a> |
+	<a href="./docs/index.md">Documentation</a> •
+	<a href="./docs/getting-started.md">Getting started</a> •
+	<a href="./docs/guides/index.md">Guides</a> •
+	<a href="./docs/reference/index.md">Reference</a> •
 	<a href="./docs/faq.md">FAQ</a>
 </p>
 
@@ -182,7 +182,7 @@ import { UserController } from "./controller.js";
 const app = createApp({
 	schema: classValidator(),
 	controllers: [UserController],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		filePath: "./openapi.yaml",
 		service: {
@@ -550,16 +550,18 @@ const app = createApp({
 
 ## Swagger UI
 
-Enable the built-in Swagger UI by setting `swagger: true` or passing a config
+Enable the built-in Swagger UI by setting `docs: { swagger: true }` or passing a config
 object:
 
 ```ts
 const app = createApp({
 	schema: classValidator(),
 	controllers: [...],
-	swagger: true,
+	docs: { swagger: true },
 	// or with a custom path:
-	// swagger: { path: "/swagger" },
+	// docs: { swagger: { path: "/swagger" } },
+	// or with SwaggerUIBundle options:
+	// docs: { swagger: { deepLinking: true, docExpansion: "list" } },
 });
 ```
 
@@ -575,18 +577,20 @@ bun add swagger-ui-dist
 
 ## Module Viewer
 
-Enable the built-in module hierarchy viewer by setting `moduleViewer: true` or
+Enable the built-in module hierarchy viewer by setting `docs: { modules: true }` or
 passing a config object:
 
 ```ts
 const app = createApp({
 	schema: classValidator(),
 	imports: [AppModule],
-	moduleViewer: true,
+	docs: { modules: true },
 	// or with a custom path:
-	// moduleViewer: { path: "/modules" },
+	// docs: { modules: { path: "/modules" } },
 	// or with SVG configuration:
-	// moduleViewer: { path: "/modules", svgPath: "/modules/graph.svg" },
+	// docs: { modules: { path: "/modules", svgPath: "/modules/graph.svg" } },
+	// enable both features at once:
+	// docs: true,
 });
 ```
 
@@ -605,7 +609,7 @@ throws if a module exports a provider token it does not declare or re-export,
 it throws with the full module path when circular imports are found, and only
 providers listed in `exports` are visible outside the module that defines them.
 
-When either Swagger UI or the module viewer is enabled, `/docs/` serves a small
+When either Swagger UI or the module viewer is enabled via `docs`, `/docs/` serves a small
 index page with links to the configured documentation endpoints.
 
 The complex example uses this mode:

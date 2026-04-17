@@ -3,6 +3,8 @@ import type {
 	Server,
 } from "bun";
 
+import type { SwaggerConfigs } from "swagger-ui-dist";
+
 import type { SchemaAdapter } from "./adapter.js";
 import type {
 	CanActivate,
@@ -91,9 +93,11 @@ export interface SecuritySchemeObject {
 	openIdConnectUrl?: string;
 }
 
-export interface SwaggerUIConfig {
+export interface SwaggerUIConfig extends Pick<SwaggerConfigs, "configUrl" | "deepLinking" | "docExpansion" | "maxDisplayedTags" | "layout"> {
 	/** Path to serve Swagger UI at (default: "/docs/swagger") */
 	path?: string;
+	/** Sort the operation list: 'alpha' (paths alphanumerically) or 'method' (HTTP method) */
+	operationsSorter?: "alpha" | "method";
 }
 
 export interface ModuleViewerConfig {
@@ -101,6 +105,13 @@ export interface ModuleViewerConfig {
 	path?: string;
 	/** Path to serve a static SVG rendering at (default: "{path}/tree.svg"). Set to false to disable. */
 	svgPath?: string | false;
+}
+
+export interface DocsConfig {
+	/** Enable Swagger UI. Set to true for defaults, or provide config. */
+	swagger?: boolean | SwaggerUIConfig;
+	/** Enable module hierarchy viewer. Set to true for defaults, or provide config. */
+	modules?: boolean | ModuleViewerConfig;
 }
 
 export interface ErrorFormatterContext {
@@ -135,10 +146,8 @@ export interface AppConfig {
 	middlewares?: MiddlewareFunction[];
 	/** Runtime guards used to enforce routes decorated with @Security(...) */
 	securityGuards?: Record<string, new(...args: any[]) => CanActivateSecurity>;
-	/** Enable Swagger UI. Set to true for defaults, or provide config. */
-	swagger?: boolean | SwaggerUIConfig;
-	/** Enable hierarchy viewer for imported modules and/or direct app controllers/providers. Set to true for defaults, or provide config. */
-	moduleViewer?: boolean | ModuleViewerConfig;
+	/** Enable documentation UIs. Set to true for all defaults, or provide config per feature. */
+	docs?: boolean | DocsConfig;
 	/** DI providers available for injection into controllers and other providers */
 	providers?: Provider[];
 	/** Module classes to import (resolves controllers and providers from modules) */

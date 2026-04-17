@@ -29,7 +29,9 @@ import {
 
 @Injectable()
 export class UsersService {
-	constructor(private readonly db: DatabaseService) {}
+	constructor(
+		private readonly db: DatabaseService,
+	) {}
 
 	findAll() {
 		void this.db;
@@ -97,7 +99,9 @@ class ErrorResponse {
 @Route("/users")
 @Tags("Users")
 export class UsersController extends Controller {
-	constructor(private readonly usersService: UsersService) {
+	constructor(
+		private readonly usersService: UsersService,
+	) {
 		super();
 	}
 

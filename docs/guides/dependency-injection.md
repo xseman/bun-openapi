@@ -2,7 +2,25 @@
 
 [Docs Home](../index.md) | [Previous: Response Validation](response-validation.md) | [Next: Modules](modules.md)
 
-bun-openapi includes a lightweight DI container with provider tokens and scopes.
+bun-openapi includes a lightweight DI container with provider tokens, scopes, and visibility enforcement.
+
+## Container Architecture
+
+The container has two scopes that form a parent-child relationship:
+
+```
++--------------------------------------+      createRequestScope()      +----------------------------------+
+| Container                            | -----------------------------> | RequestScope                     |
+|                                      |                                |                                  |
+| providers:  Map<token, factory>      |                                | cache:   Map<token, instance>    |
+| singletons: Map<token, instance>     |                                | parent:  Container               |
+|                                      |                                |                                  |
+| register(provider, visibility)       |                                | resolve(token)                   |
+| resolve(token)                       |                                | instantiate(ctor)                |
++--------------------------------------+                                +----------------------------------+
+```
+
+A new `RequestScope` is created for every incoming HTTP request. It inherits singleton instances from the parent `Container` and maintains its own cache for request-scoped providers.
 
 ## Provider Forms
 
@@ -152,6 +170,53 @@ providers: [
 export class RequestContext { ... }
 ```
 
+## Resolution Flow
+
+When the container resolves a token, it follows this decision tree:
+
+```
+resolve(token, visibleTokens)
+|
++-- token not visible? ---------- yes -> error: token not accessible
+|
++-- singleton cached? ----------- yes -> return cached instance
+|
++-- provider registered? -------- no  -> error: unknown provider token
+|
++-- currently resolving? -------- yes -> error: circular dependency
+|
+`-- call provider.factory(resolver)
+      |
+      +-- useValue    -> return value directly
+      +-- useExisting -> resolve the aliased token
+      +-- useFactory  -> resolve inject[] deps, then call factory
+      `-- useClass    -> instantiateAndInject()
+            |
+            +-- read design:paramtypes via reflect-metadata
+            +-- for each param:
+            |   +-- @Inject(token)? -> use explicit token
+            |   `-- otherwise       -> use reflected class type
+            +-- resolve each dependency recursively
+            +-- new Ctor(...resolvedDeps)
+            `-- inject @Inject() decorated fields
+```
+
+For **singleton** providers, the resolved instance is cached in the root `Container` after the first resolution. For **request-scoped** providers, the instance is cached in the `RequestScope` and discarded when the request ends.
+
+## Circular Dependency Detection
+
+The container tracks which tokens are currently being resolved. If a token is encountered again during its own resolution chain, a circular dependency error is thrown:
+
+```
+Circular dependency detected: UserService → OrderService → UserService
+```
+
+Break cycles by using `useFactory` with lazy resolution or restructuring your dependencies.
+
+## Visibility Enforcement
+
+When using [Modules](modules.md), each provider and controller has a visibility set — the tokens it is allowed to resolve. If a controller tries to inject a provider from another module that was not exported, the container throws an error at startup. This enforces module encapsulation.
+
 ## Examples
 
 - [04_dependency-injection](https://github.com/xseman/bun-openapi/tree/master/examples/04_dependency-injection/) — service tokens, `@Inject`, value providers
@@ -159,3 +224,4 @@ export class RequestContext { ... }
 - [12_form-auth](https://github.com/xseman/bun-openapi/tree/master/examples/12_form-auth/) — `DataSource` ValueProvider, injectable guard
 - [13_typeorm-relations](https://github.com/xseman/bun-openapi/tree/master/examples/13_typeorm-relations/) — `DataSource` ValueProvider, multiple repositories from one injected source
 - [14_session-auth](https://github.com/xseman/bun-openapi/tree/master/examples/14_session-auth/) — `DataSource` ValueProvider alongside an in-memory `SessionStore`
+- [15_request-scope](https://github.com/xseman/bun-openapi/tree/master/examples/15_request-scope/) — `@Injectable({ scope: "request" })` for per-request state isolation

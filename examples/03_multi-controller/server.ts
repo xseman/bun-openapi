@@ -11,7 +11,7 @@ const port = 3_000;
 const app = createApp({
 	schema: classValidator(),
 	controllers: [ProductController, OrderController, HealthController],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		service: {
 			name: "multi-controller",

@@ -29,4 +29,4 @@ export type { SchemaAdapter, ValidationFailure, ValidationResult, ValidationSucc
 
 export type { CanActivate, CanActivateSecurity, GuardContext, GuardResult, HttpVerb, InjectionEntry, Interceptor, InterceptorContext, MethodMetadata, MiddlewareFunction, ProviderToken, RouteParamEntry, RouteParamMode, RouteParamSource, SecurityGuardContext } from "./metadata.js";
 export type { ModuleTreeNode } from "./module-tree.js";
-export type { AliasProvider, AppConfig, AppResult, ClassProvider, ErrorFormatter, ErrorFormatterContext, ErrorFormatterResult, FactoryProvider, ModuleClass, ModuleMetadata, ModuleViewerConfig, OpenAPIConfig, OpenAPIDocument, Provider, RouteHandler, Scope, SwaggerUIConfig, ValueProvider, ViewEngineConfig } from "./types.js";
+export type { AliasProvider, AppConfig, AppResult, ClassProvider, DocsConfig, ErrorFormatter, ErrorFormatterContext, ErrorFormatterResult, FactoryProvider, ModuleClass, ModuleMetadata, ModuleViewerConfig, OpenAPIConfig, OpenAPIDocument, Provider, RouteHandler, Scope, SwaggerUIConfig, ValueProvider, ViewEngineConfig } from "./types.js";

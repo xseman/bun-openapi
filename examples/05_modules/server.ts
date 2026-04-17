@@ -7,7 +7,7 @@ const port = 3_000;
 const app = createApp({
 	schema: classValidator(),
 	imports: [AppModule],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		service: {
 			name: "modules",

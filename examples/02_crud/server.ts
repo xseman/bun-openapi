@@ -6,7 +6,7 @@ const port = 3_000;
 
 const app = createApp({
 	schema: classValidator(),
-	swagger: true,
+	docs: { swagger: true },
 	controllers: [UserController],
 	errorFormatter: (_error, context) => ({
 		status: context.status,

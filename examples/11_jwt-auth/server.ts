@@ -38,7 +38,7 @@ const port = 3_000;
 
 const app = createApp({
 	schema: classValidator(),
-	swagger: true,
+	docs: { swagger: true },
 	controllers: [AuthController],
 	providers: [AuthService, { provide: DataSource, useValue: AppDataSource }],
 	securityGuards: {

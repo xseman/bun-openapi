@@ -31,13 +31,18 @@ createApp(config) builds routes, OpenAPI spec, and docs endpoints.
 
 ## OpenAPI and Docs
 
-| Field        | Type                          |
-| ------------ | ----------------------------- |
-| openapi      | OpenAPIConfig                 |
-| swagger      | boolean or SwaggerUIConfig    |
-| moduleViewer | boolean or ModuleViewerConfig |
+| Field   | Type                  |
+| ------- | --------------------- |
+| openapi | OpenAPIConfig         |
+| docs    | boolean or DocsConfig |
 
-moduleViewer registers docs routes when there are imported modules or direct
+Set `docs: true` to enable both Swagger UI and module viewer with defaults.
+Or use `docs: { swagger: boolean | SwaggerUIConfig, modules: boolean | ModuleViewerConfig }` for granular control.
+
+- `docs.swagger` enables Swagger UI. `SwaggerUIConfig` supports `path` plus serializable Swagger UI options such as `configUrl`, `deepLinking`, `docExpansion`, `maxDisplayedTags`, `operationsSorter`, and `layout`.
+- `docs.modules` enables the module viewer. `ModuleViewerConfig` supports `path` and `svgPath`.
+
+The `modules` viewer registers docs routes when there are imported modules or direct
 app-level controllers/providers to visualize.
 
 ## View Rendering

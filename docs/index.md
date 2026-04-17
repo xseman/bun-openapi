@@ -96,7 +96,7 @@ class UserController extends Controller {
 const app = createApp({
 	schema: classValidator(),
 	controllers: [UserController],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: { service: { name: "my-api", version: "1.0.0" } },
 });
 

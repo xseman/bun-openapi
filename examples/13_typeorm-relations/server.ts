@@ -18,7 +18,7 @@ const port = 3_000;
 
 const app = createApp({
 	schema: classValidator(),
-	swagger: true,
+	docs: { swagger: true },
 	controllers: [UsersController, PostsController, PublishedController],
 	providers: [UserService, { provide: DataSource, useValue: AppDataSource }],
 	openapi: {

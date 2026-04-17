@@ -31,7 +31,7 @@ const app = createApp({
 			error: context.body,
 		},
 	}),
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		service: {
 			name: "guards",

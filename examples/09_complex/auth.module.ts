@@ -76,7 +76,9 @@ class MessageResponse {
 @Tags("Auth")
 @Middleware(rateLimiter)
 export class AuthController extends Controller {
-	constructor(private readonly authService: AuthService) {
+	constructor(
+		private readonly authService: AuthService,
+	) {
 		super();
 	}
 

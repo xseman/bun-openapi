@@ -7,13 +7,12 @@ const port = 3_000;
 const app = createApp({
 	schema: classValidator(),
 	imports: [AppModule],
-	swagger: true,
-	moduleViewer: true,
+	docs: true,
 	openapi: {
 		service: {
 			name: "complex",
 			version: "1.0.0",
-			description: "Capstone: multi-module composition, cross-module DI, @Middleware, and moduleViewer. Combines modules, guards, and logging patterns.",
+			description: "Capstone: multi-module composition, cross-module DI, @Middleware, and the module viewer. Combines modules, guards, and logging patterns.",
 		},
 	},
 });

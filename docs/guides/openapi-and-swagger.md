@@ -10,7 +10,7 @@ bun-openapi builds an OpenAPI 3.0.3 document at startup from decorators.
 const app = createApp({
 	schema: classValidator(),
 	controllers: [UserController],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		filePath: "./openapi.yaml",
 		service: {
@@ -27,6 +27,33 @@ const app = createApp({
 - /docs/ (index)
 - /docs/swagger/ (Swagger UI)
 - /docs/swagger/openapi.json (raw spec)
+
+## Swagger UI Options
+
+`docs.swagger` accepts the framework's `path` option plus the serializable Swagger UI options that map to `SwaggerUIBundle(...)`.
+
+```ts
+const app = createApp({
+	schema: classValidator(),
+	controllers: [UserController],
+	docs: {
+		swagger: {
+			path: "/swagger",
+			deepLinking: true,
+			docExpansion: "list",
+			operationsSorter: "alpha",
+		},
+	},
+	openapi: {
+		service: {
+			name: "users-api",
+			version: "1.0.0",
+		},
+	},
+});
+```
+
+`url` and `dom_id` are managed internally by bun-openapi so the UI always points at the generated spec endpoint.
 
 ## Security Schemes
 

@@ -34,10 +34,7 @@ import {
 	NotFoundException,
 	OperationId,
 	Param,
-	Patch,
 	Post,
-	Produces,
-	Put,
 	Query,
 	Returns,
 	Route,
@@ -48,7 +45,6 @@ import {
 	UseInterceptors,
 	ValidateResponse,
 } from "./index.js";
-import type { OpenAPIDocument } from "./index.js";
 
 // --- Test schemas ---
 
@@ -515,14 +511,14 @@ describe("createApp", () => {
 		expect(response).toBeInstanceOf(Response);
 	});
 
-	test("moduleViewer registers routes when enabled with imports", () => {
+	test("modules viewer registers routes when enabled with imports", () => {
 		@Module({ controllers: [UserController] })
 		class TestModule {}
 
 		const app = createApp({
 			schema: typebox(),
 			imports: [TestModule],
-			moduleViewer: true,
+			docs: { modules: true },
 		});
 
 		expect(app.routes).toHaveProperty("/docs/modules/");
@@ -539,7 +535,7 @@ describe("createApp", () => {
 		const app = createApp({
 			schema: typebox(),
 			controllers: [UserController],
-			swagger: true,
+			docs: { swagger: true },
 		});
 
 		expect(app.routes).toHaveProperty("/docs/swagger/");
@@ -549,14 +545,14 @@ describe("createApp", () => {
 		expect(app.routes).toHaveProperty("/docs/");
 	});
 
-	test("moduleViewer uses custom path", () => {
+	test("modules viewer uses custom path", () => {
 		@Module({ controllers: [UserController] })
 		class TestModule2 {}
 
 		const app = createApp({
 			schema: typebox(),
 			imports: [TestModule2],
-			moduleViewer: { path: "/debug/tree", svgPath: "/debug/graph.svg" },
+			docs: { modules: { path: "/debug/tree", svgPath: "/debug/graph.svg" } },
 		});
 
 		expect(app.routes).toHaveProperty("/debug/tree/");
@@ -565,26 +561,26 @@ describe("createApp", () => {
 		expect("/debug/graph.svg" in app.routes).toBe(true);
 	});
 
-	test("moduleViewer can disable svg output", () => {
+	test("modules viewer can disable svg output", () => {
 		@Module({ controllers: [UserController] })
 		class TestModule3 {}
 
 		const app = createApp({
 			schema: typebox(),
 			imports: [TestModule3],
-			moduleViewer: { svgPath: false },
+			docs: { modules: { svgPath: false } },
 		});
 
 		expect("/docs/modules/tree.svg" in app.routes).toBe(false);
 		expect(app.routes).toHaveProperty("/docs/");
 	});
 
-	test("moduleViewer registers routes for direct app controllers and providers", async () => {
+	test("modules viewer registers routes for direct app controllers and providers", async () => {
 		const app = createApp({
 			schema: typebox(),
 			controllers: [UserController],
 			providers: [ViewerProvider],
-			moduleViewer: true,
+			docs: { modules: true },
 		});
 
 		expect(app.routes).toHaveProperty("/docs/modules/");
@@ -607,10 +603,10 @@ describe("createApp", () => {
 		});
 	});
 
-	test("moduleViewer not registered without imports, controllers, or providers", () => {
+	test("modules viewer not registered without imports, controllers, or providers", () => {
 		const app = createApp({
 			schema: typebox(),
-			moduleViewer: true,
+			docs: { modules: true },
 		});
 
 		expect(app.routes).not.toHaveProperty("/docs/modules/");

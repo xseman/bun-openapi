@@ -103,7 +103,7 @@ import { classValidator } from "bun-openapi/adapters/class-validator";
 const app = createApp({
 	schema: classValidator(),
 	controllers: [UserController],
-	swagger: true,
+	docs: { swagger: true },
 	openapi: {
 		service: {
 			name: "my-api",

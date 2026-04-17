@@ -41,6 +41,7 @@ import { buildSpec } from "./openapi.js";
 import type {
 	AppConfig,
 	AppResult,
+	DocsConfig,
 	ErrorFormatter,
 	ModuleViewerConfig,
 	Provider,
@@ -176,9 +177,21 @@ export function createApp(config: AppConfig): AppResult {
 			|| config.providers?.length,
 	);
 
+	// Resolve docs config
+	const docsConfig: DocsConfig = config.docs === true
+		? {
+			swagger: true,
+			modules: true,
+		}
+		: typeof config.docs === "object"
+		? config.docs
+		: {};
+
 	// Swagger UI routes
-	if (config.swagger) {
-		const swaggerConfig: SwaggerUIConfig = typeof config.swagger === "object" ? config.swagger : {};
+	if (docsConfig.swagger) {
+		const swaggerConfig: SwaggerUIConfig = typeof docsConfig.swagger === "object"
+			? docsConfig.swagger
+			: {};
 
 		const basePath = swaggerConfig.path ?? "/docs/swagger";
 		const normalized = basePath.endsWith("/") ? basePath.slice(0, -1) : basePath;
@@ -188,6 +201,12 @@ export function createApp(config: AppConfig): AppResult {
 
 		registerRoute(routes, specPath, "GET", () => Response.json(spec));
 
+		// Extract serializable SwaggerUIBundle options (excluding our custom `path`)
+		const {
+			path: _path,
+			...swaggerBundleConfig
+		} = swaggerConfig;
+
 		const htmlPath = new URL("./swagger-ui/index.html", import.meta.url).pathname;
 		registerRoute(routes, normalized + "/", "GET", async () => {
 			const result = await Bun.build({
@@ -196,6 +215,7 @@ export function createApp(config: AppConfig): AppResult {
 				compile: true,
 				define: {
 					SPEC_URL: JSON.stringify(specPath),
+					SWAGGER_CONFIG: JSON.stringify(swaggerBundleConfig),
 				},
 			});
 
@@ -209,8 +229,8 @@ export function createApp(config: AppConfig): AppResult {
 	}
 
 	// Module hierarchy viewer routes
-	if (config.moduleViewer && hasModuleViewerTargets) {
-		const viewerConfig: ModuleViewerConfig = typeof config.moduleViewer === "object" ? config.moduleViewer : {};
+	if (docsConfig.modules && hasModuleViewerTargets) {
+		const viewerConfig: ModuleViewerConfig = typeof docsConfig.modules === "object" ? docsConfig.modules : {};
 
 		const basePath = viewerConfig.path ?? "/docs/modules";
 		const normalized = basePath.endsWith("/") ? basePath.slice(0, -1) : basePath;
