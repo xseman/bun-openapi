@@ -2,7 +2,7 @@
 	"name": "bun-openapi",
 	"description": "Build OpenAPI-compliant REST APIs using TypeScript and Bun.serve()",
 	"type": "module",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"license": "Apache-2.0",
 	"author": "Filip Seman <filip.seman@pm.me>",
 	"repository": {
