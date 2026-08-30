@@ -1,3 +1,5 @@
+
+
 <h1 align="center">
 	bun-openapi
 </h1>
@@ -80,6 +82,7 @@ Runnable examples default to `class-validator` DTOs unless the adapter choice is
 - **[12_form-auth](examples/12_form-auth/)** — Form-based web auth with JWT-in-cookie and Handlebars views
 - **[13_typeorm-relations](examples/13_typeorm-relations/)** — TypeORM one-to-many / many-to-one relations
 - **[14_session-auth](examples/14_session-auth/)** — Stateful server-side sessions with HttpOnly cookie and Handlebars
+- **[15_request-scope](examples/15_request-scope/)** — Request-scoped DI with `@Injectable({ scope: "request" })` for per-request state
 
 ## Quick start
 
